@@ -1,14 +1,13 @@
 package com.gino.siscripto.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -29,4 +28,6 @@ public class Usuario implements Serializable {
     private String email;
     @Column(name = "telefono_usuario")
     private String telefono;
+    @OneToMany
+    private List<Billetera> billeteras= new ArrayList<>();
 }
