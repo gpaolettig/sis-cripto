@@ -28,6 +28,6 @@ public class Usuario implements Serializable {
     private String email;
     @Column(name = "telefono_usuario")
     private String telefono;
-    @OneToMany
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Billetera> billeteras= new ArrayList<>();
 }

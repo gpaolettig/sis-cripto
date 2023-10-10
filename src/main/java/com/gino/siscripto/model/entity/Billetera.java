@@ -16,6 +16,7 @@ import java.util.UUID;
 @Table(name = "billetera")
 public class Billetera {
     @Id
+    @GeneratedValue
     @Column(name = "id_billetera")
     private UUID id;
     @ManyToOne(fetch = FetchType.LAZY, optional = false) //false: Cada instancia de Billetera debe estar asociada obligatoriamente a una instancia de Usuario
