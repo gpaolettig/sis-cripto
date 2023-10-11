@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/v1/usuarios")
+@RequestMapping("/api/v1")
 public class UsuarioController {
 
     @Qualifier("usuarioServiceImpl")
@@ -16,6 +18,24 @@ public class UsuarioController {
     //Alta
    @PostMapping("/crear")
     public Usuario create(@RequestBody Usuario user){
+       /*quien consuma la api podra crear un usuario con o sin billetera.
+       con billetera deberá mandar el objeto en json en el json.*/
        return userService.altaUsuario(user);
     }
+    @GetMapping("/usuarios")
+    public List<Usuario> read(){
+       return  userService.listarUsuarios();
+    }
+    @GetMapping("/usuarios/{dni}")
+    public Usuario read(@PathVariable String dni){
+        return  userService.localizarUsuario(dni);
+    }
+
+    @PutMapping("/usuarios/update/{dni}")
+    public Usuario update(@PathVariable String dni,@RequestBody Usuario usuario){
+        //todo
+        return  null;
+
+   }
+
 }

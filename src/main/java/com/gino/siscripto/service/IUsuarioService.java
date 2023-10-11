@@ -8,7 +8,8 @@ import java.util.List;
 @Service
 public interface IUsuarioService {
     Usuario altaUsuario(Usuario user);
-    Usuario localizarUsuario(String id);
+    Usuario localizarUsuario(String dni);
+    Usuario modificarUsuario(Usuario usuario);
     void bajaUsuario(Usuario user);
     List<Usuario> listarUsuarios();
 }

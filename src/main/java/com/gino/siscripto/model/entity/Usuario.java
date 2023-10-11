@@ -29,5 +29,5 @@ public class Usuario implements Serializable {
     @Column(name = "telefono_usuario")
     private String telefono;
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private List<Billetera> billeteras= new ArrayList<>();
+    private List<Billetera> billeteras;
 }

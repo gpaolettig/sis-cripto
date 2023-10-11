@@ -22,9 +22,16 @@ public class UsuarioServiceImpl implements IUsuarioService{
     }
     @Transactional(readOnly = true)
     @Override
-    public Usuario localizarUsuario(String id) {
-        return usuarioDAO.findById(id).orElse(null);
+    public Usuario localizarUsuario(String dni) {
+        return usuarioDAO.findById(dni).orElse(null);
     }
+    @Transactional
+    @Override
+    public Usuario modificarUsuario(Usuario usuario) {
+        usuarioDAO.save(usuario);
+        return usuario;
+    }
+
     @Transactional
     @Override
     public void bajaUsuario(Usuario user) {
