@@ -1,13 +1,11 @@
 package com.gino.siscripto.model.entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.*;
 
 
 import java.util.UUID;
@@ -20,8 +18,9 @@ import java.util.UUID;
 public class Billetera {
     @Id
     @GeneratedValue
+    @UuidGenerator(style = UuidGenerator.Style.TIME)
     @Column(name = "id_billetera", updatable = false, nullable = false)
-    private int id;
+    private UUID id;
     @Column(name="Usuario_DNI_usuario")
     private String dni_usuario; // La relacion es unidireccional de Usuario a billetera, pq si almacenamos el usuario tenemos serialización infinita
     @Column(name = "saldo_billetera")
