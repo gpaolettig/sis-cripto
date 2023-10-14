@@ -33,11 +33,11 @@ public class UsuarioServiceImpl implements IUsuarioService{
 
         //Verifico si el usuario existe en la BD
         if(localizarUsuario(user.getDni()) != null){
-            return new ResponseEntity<>("El usuario con DNI "+user.getDni()+" ya existe",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("El usuario con DNI "+user.getDni()+" ya existe",HttpStatus.CONFLICT);
         }
         //Crear billetera (ya que si un usuario es creado se crea su billetera 1..*)
         List<Billetera>wallets= new ArrayList<>();
-        Billetera wallet = new Billetera(); //el id lo genera jpa
+        Billetera wallet = new Billetera(); //el id lo genera JPA
         wallet.setSaldo((float)0.0);
         wallet.setDni_usuario(user.getDni());
         wallets.add(wallet);

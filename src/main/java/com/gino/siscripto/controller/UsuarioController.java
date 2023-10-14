@@ -21,7 +21,7 @@ public class UsuarioController {
     @Qualifier("usuarioServiceImpl")
     @Autowired
     private IUsuarioService userService;
-    //Alta
+    //Alta listo con DTO
    @PostMapping("/usuarios/crear")
     public ResponseEntity<?> create(@RequestBody CreateUsuarioDTO createUsuarioDTO){
       return userService.altaUsuario(createUsuarioDTO);
