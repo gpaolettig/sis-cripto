@@ -1,5 +1,6 @@
 package com.gino.siscripto.controller;
 
+import com.gino.siscripto.dto.CreateUsuarioDTO;
 import com.gino.siscripto.model.entity.Billetera;
 import com.gino.siscripto.model.entity.Usuario;
 import com.gino.siscripto.service.IUsuarioService;
@@ -22,22 +23,8 @@ public class UsuarioController {
     private IUsuarioService userService;
     //Alta
    @PostMapping("/usuarios/crear")
-    public ResponseEntity<?> create(@RequestBody Usuario user){
-       //Verifico si el usuario existe en la BD
-       if(userService.localizarUsuario(user.getDni())!=null){
-           return ResponseEntity.badRequest().body("El usuario ya existe.");
-       }
-       //Crear billetera (ya que si un usuario es creado se crea su billetera 1..*)
-       List<Billetera>wallets= new ArrayList<>();
-       Billetera wallet = new Billetera(); //el id lo genera jpa
-       wallet.setSaldo((float)0.0);
-       wallet.setDni_usuario(user.getDni());
-       wallets.add(wallet);
-       //asignar las wallets al user
-       user.setBilleteras(wallets);
-       Usuario newUser = userService.altaUsuario(user);
-       return new ResponseEntity<>(user,HttpStatus.CREATED);
-
+    public ResponseEntity<?> create(@RequestBody CreateUsuarioDTO createUsuarioDTO){
+      return userService.altaUsuario(createUsuarioDTO);
     }
     @GetMapping("/usuarios")
     public ResponseEntity<List<Usuario>> read(){

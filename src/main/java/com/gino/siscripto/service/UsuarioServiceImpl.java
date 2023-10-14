@@ -1,8 +1,12 @@
 package com.gino.siscripto.service;
 
+import com.gino.siscripto.dto.CreateUsuarioDTO;
+import com.gino.siscripto.model.entity.Billetera;
 import com.gino.siscripto.model.entity.Usuario;
 import com.gino.siscripto.repository.IUsuarioDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +21,33 @@ public class UsuarioServiceImpl implements IUsuarioService{
     private IUsuarioDAO usuarioDAO;
     @Transactional
     @Override
-    public Usuario altaUsuario(Usuario user) {
-        return usuarioDAO.save(user);
+    public ResponseEntity<?> altaUsuario(CreateUsuarioDTO createUsuarioDTO) {
+        //transformar el userDTO en user
+        Usuario user = new Usuario();
+        user.setDni(createUsuarioDTO.getDni());
+        user.setNombre(createUsuarioDTO.getNombre());
+        user.setApellido(createUsuarioDTO.getApellido());
+        user.setSexo(createUsuarioDTO.getSexo());
+        user.setEmail(createUsuarioDTO.getEmail());
+        user.setTelefono(createUsuarioDTO.getTelefono());
+
+        //Verifico si el usuario existe en la BD
+        if(localizarUsuario(user.getDni()) != null){
+            return new ResponseEntity<>("El usuario con DNI "+user.getDni()+" ya existe",HttpStatus.BAD_REQUEST);
+        }
+        //Crear billetera (ya que si un usuario es creado se crea su billetera 1..*)
+        List<Billetera>wallets= new ArrayList<>();
+        Billetera wallet = new Billetera(); //el id lo genera jpa
+        wallet.setSaldo((float)0.0);
+        wallet.setDni_usuario(user.getDni());
+        wallets.add(wallet);
+        //asignar las wallets al user
+        user.setBilleteras(wallets);
+        //llamar un metodo del repositorio para guardarlo
+        usuarioDAO.save(user);
+        //crear una respuesta
+        return new ResponseEntity<>("El usuario fue creado con éxito",HttpStatus.CREATED);
+
     }
     @Transactional(readOnly = true)
     @Override
