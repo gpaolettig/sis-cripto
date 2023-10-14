@@ -5,6 +5,7 @@ import com.gino.siscripto.model.entity.Usuario;
 import com.gino.siscripto.service.IUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class UsuarioController {
     @Autowired
     private IUsuarioService userService;
     //Alta
-   @PostMapping("/crear")
+   @PostMapping("/usuarios/crear")
     public ResponseEntity<?> create(@RequestBody Usuario user){
        //Verifico si el usuario existe en la BD
        if(userService.localizarUsuario(user.getDni())!=null){
@@ -35,23 +36,38 @@ public class UsuarioController {
        //asignar las wallets al user
        user.setBilleteras(wallets);
        Usuario newUser = userService.altaUsuario(user);
-       return ResponseEntity.ok(newUser);
+       return new ResponseEntity<>(user,HttpStatus.CREATED);
 
     }
     @GetMapping("/usuarios")
-    public List<Usuario> read(){
-       return  userService.listarUsuarios();
+    public ResponseEntity<List<Usuario>> read(){
+       return new ResponseEntity<>(userService.listarUsuarios(), HttpStatus.OK);
+
     }
     @GetMapping("/usuarios/{dni}")
     public Usuario read(@PathVariable String dni){
         return  userService.localizarUsuario(dni);
     }
 
-    @PutMapping("/usuarios/update/{dni}")
-    public Usuario update(@PathVariable String dni,@RequestBody Usuario usuario){
-        //todo
-        return  null;
+    @PutMapping("/usuarios/update")
+    public ResponseEntity<?> update(@RequestBody Usuario user){
+        if(userService.localizarUsuario(user.getDni())!=null){
+            userService.modificarUsuario(user);
+            return ResponseEntity.ok().body("El usuario con DNI "+user.getDni()+" Ha sido actualizado");
+        }
+        return ResponseEntity.badRequest().body("El usuario a actualizar no existe.");
 
    }
+   @DeleteMapping("/usuarios/delete/{dni}")
+   public ResponseEntity<?> delete(@PathVariable String dni){
+       //Verifico si el usuario existe en la BD deberia hacerlo el servicio y que retorne un respentity
+       if(userService.localizarUsuario(dni)!=null){
+           userService.bajaUsuario(userService.localizarUsuario(dni));
+           return ResponseEntity.ok().body("El usuario con DNI "+dni+" Ha sido eliminado");
+       }
+       return ResponseEntity.badRequest().body("El usuario con DNI "+dni +" no existe.");
+
+   }
+
 
 }
