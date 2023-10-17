@@ -56,11 +56,31 @@ public class UsuarioServiceImpl implements IUsuarioService{
     }
     @Transactional
     @Override
-    public Usuario modificarUsuario(Usuario usuario) {
-        usuarioDAO.save(usuario);
-        return usuario;
-    }
+    public ResponseEntity<?> modificarUsuario(CreateUsuarioDTO createUsuarioDTO) {
+        /*
+        Usando save con un objeto que ya tiene un identificador (PK) Spring Data JPA
+        actualiza en vez de agregar.
+        Si el objeto ya existe en la base de datos y tiene un ID válido,
+        Spring Data JPA generará una sentencia SQL de actualización para modificar los atributos del objeto en la base de datos.
+        Si el objeto pasado a save no tiene un ID (o su ID es nulo), Spring Data JPA lo considerará un nuevo objeto y generará
+        una sentencia SQL de inserción para agregarlo como un nuevo registro en la base de datos.
+        */
 
+        // Verificar si el usuario existe en la BD
+        Usuario usuarioExistente = localizarUsuario(createUsuarioDTO.getDni());
+        if (usuarioExistente != null) {
+            // Actualizar los atributos del usuarioExistente con los valores del DTO
+            usuarioExistente.setNombre(createUsuarioDTO.getNombre());
+            usuarioExistente.setApellido(createUsuarioDTO.getApellido());
+            usuarioExistente.setSexo(createUsuarioDTO.getSexo());
+            usuarioExistente.setEmail(createUsuarioDTO.getEmail());
+            usuarioExistente.setTelefono(createUsuarioDTO.getTelefono());
+            // Guardar el usuarioExistente actualizado en la base de datos
+            usuarioDAO.save(usuarioExistente);
+            return new ResponseEntity<>("El usuario fue actualizado con éxito", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("El usuario no se encontró en la base de datos", HttpStatus.NOT_FOUND);
+    }
     @Transactional
     @Override
     public void bajaUsuario(Usuario user) {

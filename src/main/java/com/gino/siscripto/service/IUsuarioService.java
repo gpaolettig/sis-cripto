@@ -11,7 +11,7 @@ import java.util.List;
 public interface IUsuarioService {
     ResponseEntity<?> altaUsuario(CreateUsuarioDTO createUsuarioDTO);
     Usuario localizarUsuario(String dni);
-    Usuario modificarUsuario(Usuario usuario);
+    ResponseEntity<?> modificarUsuario(CreateUsuarioDTO createUsuarioDTO);
     void bajaUsuario(Usuario user);
     ResponseEntity<?> listarUsuarios();
 }

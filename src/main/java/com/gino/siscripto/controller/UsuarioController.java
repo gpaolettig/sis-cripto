@@ -29,20 +29,10 @@ public class UsuarioController {
     @GetMapping("/usuarios")
     public ResponseEntity<?> read(){
        return userService.listarUsuarios();
-
     }
-    @GetMapping("/usuarios/{dni}")
-    public Usuario read(@PathVariable String dni){
-        return  userService.localizarUsuario(dni);
-    }
-
     @PutMapping("/usuarios/update")
-    public ResponseEntity<?> update(@RequestBody Usuario user){
-        if(userService.localizarUsuario(user.getDni())!=null){
-            userService.modificarUsuario(user);
-            return ResponseEntity.ok().body("El usuario con DNI "+user.getDni()+" Ha sido actualizado");
-        }
-        return ResponseEntity.badRequest().body("El usuario a actualizar no existe.");
+    public ResponseEntity<?> update(@RequestBody CreateUsuarioDTO createUsuarioDTO){
+        return userService.modificarUsuario(createUsuarioDTO);
 
    }
    @DeleteMapping("/usuarios/delete/{dni}")
