@@ -12,6 +12,6 @@ public interface IUsuarioService {
     ResponseEntity<?> altaUsuario(CreateUsuarioDTO createUsuarioDTO);
     Usuario localizarUsuario(String dni);
     ResponseEntity<?> modificarUsuario(CreateUsuarioDTO createUsuarioDTO);
-    void bajaUsuario(Usuario user);
+    ResponseEntity<?> bajaUsuario(String dni);
     ResponseEntity<?> listarUsuarios();
 }

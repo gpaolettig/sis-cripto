@@ -10,10 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 @RestController
 @RequestMapping("/api/v1")
 public class UsuarioController {
@@ -35,14 +31,9 @@ public class UsuarioController {
         return userService.modificarUsuario(createUsuarioDTO);
 
    }
-   @DeleteMapping("/usuarios/delete/{dni}")
+   @DeleteMapping("/usuarios/{dni}")
    public ResponseEntity<?> delete(@PathVariable String dni){
-       //Verifico si el usuario existe en la BD deberia hacerlo el servicio y que retorne un respentity
-       if(userService.localizarUsuario(dni)!=null){
-           userService.bajaUsuario(userService.localizarUsuario(dni));
-           return ResponseEntity.ok().body("El usuario con DNI "+dni+" Ha sido eliminado");
-       }
-       return ResponseEntity.badRequest().body("El usuario con DNI "+dni +" no existe.");
+       return userService.bajaUsuario(dni);
 
    }
 

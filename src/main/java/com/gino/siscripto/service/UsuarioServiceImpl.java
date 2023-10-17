@@ -83,8 +83,15 @@ public class UsuarioServiceImpl implements IUsuarioService{
     }
     @Transactional
     @Override
-    public void bajaUsuario(Usuario user) {
-        usuarioDAO.delete(user);
+    public ResponseEntity<?> bajaUsuario(String dni) {
+        //falta confirmación de baja con jwt
+        // Verificar si el usuario existe en la BD
+        Usuario usuarioExistente = localizarUsuario(dni);
+        if(usuarioExistente != null){
+            usuarioDAO.delete(usuarioExistente);
+            return new ResponseEntity<>("El usuario con dni "+dni+" ha sido eliminado", HttpStatus.OK);
+        }
+        return  new ResponseEntity<>("Usuario con dni"+dni+" no encontrado",HttpStatus.NOT_FOUND);
     }
 
 
