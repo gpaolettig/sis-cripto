@@ -13,5 +13,5 @@ public interface IUsuarioService {
     Usuario localizarUsuario(String dni);
     Usuario modificarUsuario(Usuario usuario);
     void bajaUsuario(Usuario user);
-    List<Usuario> listarUsuarios();
+    ResponseEntity<?> listarUsuarios();
 }

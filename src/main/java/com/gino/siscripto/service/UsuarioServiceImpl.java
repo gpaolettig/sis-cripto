@@ -66,12 +66,17 @@ public class UsuarioServiceImpl implements IUsuarioService{
     public void bajaUsuario(Usuario user) {
         usuarioDAO.delete(user);
     }
+
+
     @Transactional(readOnly = true)
     @Override
-    public List<Usuario> listarUsuarios() {
-        Iterable<Usuario> usuariosIterable = usuarioDAO.findAll();
+    public ResponseEntity<?> listarUsuarios() {
         List<Usuario> listaUsuarios = new ArrayList<>();
+        Iterable<Usuario> usuariosIterable = usuarioDAO.findAll();
         usuariosIterable.forEach(listaUsuarios::add);
-        return listaUsuarios;
+        if (listaUsuarios.isEmpty()){
+            return new ResponseEntity<>("No se encontraron usuarios" ,HttpStatus.OK);
+        }
+        return new ResponseEntity<>(listaUsuarios,HttpStatus.OK);
     }
 }

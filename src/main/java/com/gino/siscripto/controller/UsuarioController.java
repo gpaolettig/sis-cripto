@@ -27,8 +27,8 @@ public class UsuarioController {
       return userService.altaUsuario(createUsuarioDTO);
     }
     @GetMapping("/usuarios")
-    public ResponseEntity<List<Usuario>> read(){
-       return new ResponseEntity<>(userService.listarUsuarios(), HttpStatus.OK);
+    public ResponseEntity<?> read(){
+       return userService.listarUsuarios();
 
     }
     @GetMapping("/usuarios/{dni}")
