@@ -1,9 +1,9 @@
 package com.gino.siscripto.service;
 
-import com.gino.siscripto.dto.CreateUsuarioDTO;
-import com.gino.siscripto.model.entity.Billetera;
-import com.gino.siscripto.model.entity.Usuario;
-import com.gino.siscripto.repository.IUsuarioDAO;
+import com.gino.siscripto.dto.CreateUserDTO;
+import com.gino.siscripto.model.entity.Wallet;
+import com.gino.siscripto.model.entity.User;
+import com.gino.siscripto.repository.IUserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,35 +14,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UsuarioServiceImpl implements IUsuarioService{
+public class UserServiceImpl implements IUserService {
     //logica de negocio
     //Inyección de dependencia
     @Autowired
-    private IUsuarioDAO usuarioDAO;
+    private IUserDAO usuarioDAO;
     @Transactional
     @Override
-    public ResponseEntity<?> altaUsuario(CreateUsuarioDTO createUsuarioDTO) {
+    public ResponseEntity<?> altaUsuario(CreateUserDTO createUserDTO) {
         //transformar el userDTO en user
-        Usuario user = new Usuario();
-        user.setDni(createUsuarioDTO.getDni());
-        user.setNombre(createUsuarioDTO.getNombre());
-        user.setApellido(createUsuarioDTO.getApellido());
-        user.setSexo(createUsuarioDTO.getSexo());
-        user.setEmail(createUsuarioDTO.getEmail());
-        user.setTelefono(createUsuarioDTO.getTelefono());
+        User user = new User();
+        user.setDni(createUserDTO.getDni());
+        user.setNombre(createUserDTO.getNombre());
+        user.setApellido(createUserDTO.getApellido());
+        user.setSexo(createUserDTO.getSexo());
+        user.setEmail(createUserDTO.getEmail());
+        user.setTelefono(createUserDTO.getTelefono());
 
         //Verifico si el usuario existe en la BD
         if(localizarUsuario(user.getDni()) != null){
             return new ResponseEntity<>("El usuario con DNI "+user.getDni()+" ya existe",HttpStatus.CONFLICT);
         }
         //Crear billetera (ya que si un usuario es creado se crea su billetera 1..*)
-        List<Billetera>wallets= new ArrayList<>();
-        Billetera wallet = new Billetera(); //el id lo genera JPA
+        List<Wallet>wallets= new ArrayList<>();
+        Wallet wallet = new Wallet(); //el id lo genera JPA
         wallet.setSaldo((float)0.0);
         wallet.setDni_usuario(user.getDni());
         wallets.add(wallet);
         //asignar las wallets al user
-        user.setBilleteras(wallets);
+        user.setWallets(wallets);
         //llamar un metodo del repositorio para guardarlo
         usuarioDAO.save(user);
         //crear una respuesta
@@ -51,12 +51,12 @@ public class UsuarioServiceImpl implements IUsuarioService{
     }
     @Transactional(readOnly = true)
     @Override
-    public Usuario localizarUsuario(String dni) {
+    public User localizarUsuario(String dni) {
         return usuarioDAO.findById(dni).orElse(null);
     }
     @Transactional
     @Override
-    public ResponseEntity<?> modificarUsuario(CreateUsuarioDTO createUsuarioDTO) {
+    public ResponseEntity<?> modificarUsuario(CreateUserDTO createUserDTO) {
         /*
         Usando save con un objeto que ya tiene un identificador (PK) Spring Data JPA
         actualiza en vez de agregar.
@@ -67,16 +67,16 @@ public class UsuarioServiceImpl implements IUsuarioService{
         */
 
         // Verificar si el usuario existe en la BD
-        Usuario usuarioExistente = localizarUsuario(createUsuarioDTO.getDni());
-        if (usuarioExistente != null) {
-            // Actualizar los atributos del usuarioExistente con los valores del DTO
-            usuarioExistente.setNombre(createUsuarioDTO.getNombre());
-            usuarioExistente.setApellido(createUsuarioDTO.getApellido());
-            usuarioExistente.setSexo(createUsuarioDTO.getSexo());
-            usuarioExistente.setEmail(createUsuarioDTO.getEmail());
-            usuarioExistente.setTelefono(createUsuarioDTO.getTelefono());
-            // Guardar el usuarioExistente actualizado en la base de datos
-            usuarioDAO.save(usuarioExistente);
+        User userExistente = localizarUsuario(createUserDTO.getDni());
+        if (userExistente != null) {
+            // Actualizar los atributos del userExistente con los valores del DTO
+            userExistente.setNombre(createUserDTO.getNombre());
+            userExistente.setApellido(createUserDTO.getApellido());
+            userExistente.setSexo(createUserDTO.getSexo());
+            userExistente.setEmail(createUserDTO.getEmail());
+            userExistente.setTelefono(createUserDTO.getTelefono());
+            // Guardar el userExistente actualizado en la base de datos
+            usuarioDAO.save(userExistente);
             return new ResponseEntity<>("El usuario fue actualizado con éxito", HttpStatus.OK);
         }
         return new ResponseEntity<>("El usuario no se encontró en la base de datos", HttpStatus.NOT_FOUND);
@@ -86,24 +86,24 @@ public class UsuarioServiceImpl implements IUsuarioService{
     public ResponseEntity<?> bajaUsuario(String dni) {
         //falta confirmación de baja con jwt
         // Verificar si el usuario existe en la BD
-        Usuario usuarioExistente = localizarUsuario(dni);
-        if(usuarioExistente != null){
-            usuarioDAO.delete(usuarioExistente);
+        User userExistente = localizarUsuario(dni);
+        if(userExistente != null){
+            usuarioDAO.delete(userExistente);
             return new ResponseEntity<>("El usuario con dni "+dni+" ha sido eliminado", HttpStatus.OK);
         }
-        return  new ResponseEntity<>("Usuario con dni"+dni+" no encontrado",HttpStatus.NOT_FOUND);
+        return  new ResponseEntity<>("User con dni"+dni+" no encontrado",HttpStatus.NOT_FOUND);
     }
 
 
     @Transactional(readOnly = true)
     @Override
     public ResponseEntity<?> listarUsuarios() {
-        List<Usuario> listaUsuarios = new ArrayList<>();
-        Iterable<Usuario> usuariosIterable = usuarioDAO.findAll();
-        usuariosIterable.forEach(listaUsuarios::add);
-        if (listaUsuarios.isEmpty()){
+        List<User> listaUsers = new ArrayList<>();
+        Iterable<User> usuariosIterable = usuarioDAO.findAll();
+        usuariosIterable.forEach(listaUsers::add);
+        if (listaUsers.isEmpty()){
             return new ResponseEntity<>("No se encontraron usuarios" ,HttpStatus.OK);
         }
-        return new ResponseEntity<>(listaUsuarios,HttpStatus.OK);
+        return new ResponseEntity<>(listaUsers,HttpStatus.OK);
     }
 }

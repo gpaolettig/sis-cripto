@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -14,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "usuario")
-public class Usuario implements Serializable {
+public class User implements Serializable {
     @Id
     @Column(name = "DNI_usuario")
     private String dni;
@@ -29,5 +28,5 @@ public class Usuario implements Serializable {
     @Column(name = "telefono_usuario")
     private String telefono;
     @OneToMany(mappedBy = "dni_usuario", cascade = CascadeType.ALL)
-    private List<Billetera> billeteras;
+    private List<Wallet> wallets;
 }

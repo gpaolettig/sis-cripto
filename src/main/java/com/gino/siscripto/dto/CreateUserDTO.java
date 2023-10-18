@@ -1,7 +1,5 @@
 package com.gino.siscripto.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateUsuarioDTO {
+public class CreateUserDTO {
     private String dni;
     private String nombre;
     private String apellido;

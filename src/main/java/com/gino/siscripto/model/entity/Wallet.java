@@ -15,14 +15,14 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 @Table(name = "billetera")
-public class Billetera {
+public class Wallet {
     @Id
     @GeneratedValue
     @UuidGenerator(style = UuidGenerator.Style.TIME)
     @Column(name = "id_billetera", updatable = false, nullable = false)
     private UUID id;
     @Column(name="Usuario_DNI_usuario")
-    private String dni_usuario; // La relacion es unidireccional de Usuario a billetera, pq si almacenamos el usuario tenemos serialización infinita
+    private String dni_usuario; // La relacion es unidireccional de User a billetera, pq si almacenamos el usuario tenemos serialización infinita
     @Column(name = "saldo_billetera")
     private Float saldo;
 }
