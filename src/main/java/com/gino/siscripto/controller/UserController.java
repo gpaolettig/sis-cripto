@@ -1,9 +1,12 @@
 package com.gino.siscripto.controller;
 
 import com.gino.siscripto.dto.CreateUserDTO;
+import com.gino.siscripto.exceptions.ApiException;
+import com.gino.siscripto.model.entity.User;
 import com.gino.siscripto.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,10 +17,12 @@ public class UserController {
     @Qualifier("userServiceImpl")
     @Autowired
     private IUserService userService;
-    //Alta listo con DTO
-   @PostMapping("/usuarios")
-    public ResponseEntity<?> create(@RequestBody CreateUserDTO createUserDTO){
-      return userService.altaUsuario(createUserDTO);
+
+   //Alta User con manejo de excepciones
+    @PostMapping("/usuarios")
+    public ResponseEntity<?> create(@RequestBody CreateUserDTO createUserDTO) throws ApiException {
+      User user = userService.altaUsuario(createUserDTO);
+       return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
     @GetMapping("/usuarios")
     public ResponseEntity<?> read(){

@@ -1,6 +1,7 @@
 package com.gino.siscripto.service;
 
 import com.gino.siscripto.dto.CreateUserDTO;
+import com.gino.siscripto.exceptions.UserAlreadyExists;
 import com.gino.siscripto.model.entity.Wallet;
 import com.gino.siscripto.model.entity.User;
 import com.gino.siscripto.repository.IUserDAO;
@@ -21,7 +22,7 @@ public class UserServiceImpl implements IUserService {
     private IUserDAO usuarioDAO;
     @Transactional
     @Override
-    public ResponseEntity<?> altaUsuario(CreateUserDTO createUserDTO) {
+    public User altaUsuario(CreateUserDTO createUserDTO) throws UserAlreadyExists {
         //transformar el userDTO en user
         User user = new User();
         user.setDni(createUserDTO.getDni());
@@ -32,8 +33,8 @@ public class UserServiceImpl implements IUserService {
         user.setTelefono(createUserDTO.getTelefono());
 
         //Verifico si el usuario existe en la BD
-        if(localizarUsuario(user.getDni()) != null){
-            return new ResponseEntity<>("El usuario con DNI "+user.getDni()+" ya existe",HttpStatus.CONFLICT);
+        if(usuarioDAO.findById(createUserDTO.getDni()).isPresent()){
+            throw new UserAlreadyExists(createUserDTO.getDni());
         }
         //Crear billetera (ya que si un usuario es creado se crea su billetera 1..*)
         List<Wallet>wallets= new ArrayList<>();
@@ -45,8 +46,7 @@ public class UserServiceImpl implements IUserService {
         user.setWallets(wallets);
         //llamar un metodo del repositorio para guardarlo
         usuarioDAO.save(user);
-        //crear una respuesta
-        return new ResponseEntity<>("El usuario fue creado con éxito",HttpStatus.CREATED);
+        return user;
 
     }
     @Transactional(readOnly = true)
