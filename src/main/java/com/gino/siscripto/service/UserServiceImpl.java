@@ -1,7 +1,9 @@
 package com.gino.siscripto.service;
 
 import com.gino.siscripto.dto.CreateUserDTO;
+import com.gino.siscripto.exceptions.ApiException;
 import com.gino.siscripto.exceptions.UserAlreadyExists;
+import com.gino.siscripto.exceptions.UserDoesNotExists;
 import com.gino.siscripto.model.entity.Wallet;
 import com.gino.siscripto.model.entity.User;
 import com.gino.siscripto.repository.IUserDAO;
@@ -13,16 +15,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements IUserService {
     //logica de negocio
+
     //Inyección de dependencia
     @Autowired
     private IUserDAO usuarioDAO;
     @Transactional
     @Override
-    public User altaUsuario(CreateUserDTO createUserDTO) throws UserAlreadyExists {
+    public User createUser(CreateUserDTO createUserDTO) throws UserAlreadyExists {
         //transformar el userDTO en user
         User user = new User();
         user.setDni(createUserDTO.getDni());
@@ -51,12 +55,17 @@ public class UserServiceImpl implements IUserService {
     }
     @Transactional(readOnly = true)
     @Override
-    public User localizarUsuario(String dni) {
-        return usuarioDAO.findById(dni).orElse(null);
+    public User getUser(String dni) throws UserDoesNotExists {
+        Optional<User> user = usuarioDAO.findById(dni);
+        if(user.isPresent()){
+            return  user.get();
+        }
+        throw new UserDoesNotExists(dni);
     }
+
     @Transactional
     @Override
-    public ResponseEntity<?> modificarUsuario(CreateUserDTO createUserDTO) {
+    public User updateUser(String dni,CreateUserDTO createUserDTO) throws ApiException {
         /*
         Usando save con un objeto que ya tiene un identificador (PK) Spring Data JPA
         actualiza en vez de agregar.
@@ -67,7 +76,7 @@ public class UserServiceImpl implements IUserService {
         */
 
         // Verificar si el usuario existe en la BD
-        User userExistente = localizarUsuario(createUserDTO.getDni());
+        User userExistente = getUser(dni);
         if (userExistente != null) {
             // Actualizar los atributos del userExistente con los valores del DTO
             userExistente.setNombre(createUserDTO.getNombre());
@@ -77,33 +86,30 @@ public class UserServiceImpl implements IUserService {
             userExistente.setTelefono(createUserDTO.getTelefono());
             // Guardar el userExistente actualizado en la base de datos
             usuarioDAO.save(userExistente);
-            return new ResponseEntity<>("El usuario fue actualizado con éxito", HttpStatus.OK);
+            return userExistente;
         }
-        return new ResponseEntity<>("El usuario no se encontró en la base de datos", HttpStatus.NOT_FOUND);
+        throw new UserDoesNotExists(dni);
     }
     @Transactional
     @Override
-    public ResponseEntity<?> bajaUsuario(String dni) {
-        //falta confirmación de baja con jwt
+    public User deleteUser(String dni) throws ApiException {
+        //falta confirmación de baja con auth
         // Verificar si el usuario existe en la BD
-        User userExistente = localizarUsuario(dni);
+        User userExistente = getUser(dni);
         if(userExistente != null){
             usuarioDAO.delete(userExistente);
-            return new ResponseEntity<>("El usuario con dni "+dni+" ha sido eliminado", HttpStatus.OK);
+            return userExistente;
         }
-        return  new ResponseEntity<>("User con dni"+dni+" no encontrado",HttpStatus.NOT_FOUND);
+        throw new UserDoesNotExists(dni);
     }
 
 
     @Transactional(readOnly = true)
     @Override
-    public ResponseEntity<?> listarUsuarios() {
+    public List<User> getAll() {
         List<User> listaUsers = new ArrayList<>();
         Iterable<User> usuariosIterable = usuarioDAO.findAll();
         usuariosIterable.forEach(listaUsers::add);
-        if (listaUsers.isEmpty()){
-            return new ResponseEntity<>("No se encontraron usuarios" ,HttpStatus.OK);
-        }
-        return new ResponseEntity<>(listaUsers,HttpStatus.OK);
+        return listaUsers;
     }
 }

@@ -6,11 +6,13 @@ import com.gino.siscripto.model.entity.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public interface IUserService {
-    User altaUsuario(CreateUserDTO createUserDTO) throws ApiException;
-    User localizarUsuario(String dni);
-    ResponseEntity<?> modificarUsuario(CreateUserDTO createUserDTO);
-    ResponseEntity<?> bajaUsuario(String dni);
-    ResponseEntity<?> listarUsuarios();
+    User createUser(CreateUserDTO createUserDTO) throws ApiException;
+    User getUser(String dni) throws ApiException;
+    User updateUser(String dni, CreateUserDTO createUserDTO) throws ApiException;
+    User deleteUser(String dni) throws ApiException;
+    List<User> getAll() throws ApiException;
 }

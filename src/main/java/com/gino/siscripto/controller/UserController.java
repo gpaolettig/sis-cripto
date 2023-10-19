@@ -18,24 +18,35 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
-   //Alta User con manejo de excepciones
+   //Alta user
     @PostMapping("/usuarios")
-    public ResponseEntity<?> create(@RequestBody CreateUserDTO createUserDTO) throws ApiException {
-      User user = userService.altaUsuario(createUserDTO);
+    public ResponseEntity<?> createUser(@RequestBody CreateUserDTO createUserDTO) throws ApiException {
+      User user = userService.createUser(createUserDTO);
        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
-    @GetMapping("/usuarios")
-    public ResponseEntity<?> read(){
-       return userService.listarUsuarios();
+
+    //get user por dni
+    @GetMapping("/usuarios/{dni}")
+    public ResponseEntity<?> get(@PathVariable String dni) throws ApiException {
+        User user = userService.getUser(dni);
+        return  new ResponseEntity<>(user,HttpStatus.OK);
     }
-    @PutMapping("/usuarios") //me pasan los datos que quiero modificar en el dto
-    public ResponseEntity<?> update(@RequestBody CreateUserDTO createUserDTO){
-        return userService.modificarUsuario(createUserDTO);
+
+    //get users
+    @GetMapping("/usuarios")
+    public ResponseEntity<?> getAll() throws ApiException {
+        return new ResponseEntity<>(userService.getAll(), HttpStatus.OK);
+    }
+    @PutMapping("/usuarios/{dni}") //me pasan los datos que quiero modificar en el dto
+    public ResponseEntity<?> update(@RequestBody CreateUserDTO createUserDTO, @PathVariable String dni) throws ApiException {
+        User user = userService.updateUser(dni,createUserDTO);
+        return new ResponseEntity<>(user, HttpStatus.OK);
 
    }
    @DeleteMapping("/usuarios/{dni}")
-   public ResponseEntity<?> delete(@PathVariable String dni){
-       return userService.bajaUsuario(dni);
+   public ResponseEntity<?> delete(@PathVariable String dni) throws ApiException {
+       User user = userService.deleteUser(dni);
+       return new ResponseEntity<>(user,HttpStatus.OK);
 
    }
 
