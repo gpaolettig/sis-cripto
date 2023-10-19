@@ -18,7 +18,7 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
-   //Alta user
+
     @PostMapping("/usuarios")
     public ResponseEntity<?> createUser(@RequestBody CreateUserDTO createUserDTO) throws ApiException {
       User user = userService.createUser(createUserDTO);

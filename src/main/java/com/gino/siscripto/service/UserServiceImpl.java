@@ -76,8 +76,9 @@ public class UserServiceImpl implements IUserService {
         */
 
         // Verificar si el usuario existe en la BD
-        User userExistente = getUser(dni);
-        if (userExistente != null) {
+        Optional<User> user = usuarioDAO.findById(dni);
+        if (user.isPresent()) {
+            User userExistente=user.get();
             // Actualizar los atributos del userExistente con los valores del DTO
             userExistente.setNombre(createUserDTO.getNombre());
             userExistente.setApellido(createUserDTO.getApellido());
@@ -95,14 +96,22 @@ public class UserServiceImpl implements IUserService {
     public User deleteUser(String dni) throws ApiException {
         //falta confirmación de baja con auth
         // Verificar si el usuario existe en la BD
+        Optional<User> user = usuarioDAO.findById(dni);
+        if(user.isPresent()){
+            usuarioDAO.delete(user.get());
+            return user.get();
+        }
+        throw new UserDoesNotExists(dni);
+
+       /*
         User userExistente = getUser(dni);
         if(userExistente != null){
             usuarioDAO.delete(userExistente);
             return userExistente;
         }
         throw new UserDoesNotExists(dni);
+        */
     }
-
 
     @Transactional(readOnly = true)
     @Override
