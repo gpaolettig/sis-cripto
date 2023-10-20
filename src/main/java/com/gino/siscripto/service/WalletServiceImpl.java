@@ -20,16 +20,16 @@ public class WalletServiceImpl implements IWalletService{
     @Override
     public Wallet createWallet(CreateWalletDTO createWalletDTO) throws ApiException {
         // Controlar que el usuario exista antes de crear la billetera
-        if (iUserDAO.findById(createWalletDTO.getDniUser()).isPresent()) {
+        if (iUserDAO.findById(createWalletDTO.getDni()).isPresent()) {
             // Transformar walletDTO en wallet
             Wallet wallet = new Wallet();
-            // No es necesario configurar el ID, se generará automáticamente
-            wallet.setDni_usuario(createWalletDTO.getDniUser());
+            // El ID se generará automáticamente
+            wallet.setDni_usuario(createWalletDTO.getDni());
             wallet.setSaldo(createWalletDTO.getSaldo());
             // Guardar la billetera en la base de datos
             return iWalletDAO.save(wallet);
         } else {
-            throw new UserDoesNotExists(createWalletDTO.getDniUser());
+            throw new UserDoesNotExists(createWalletDTO.getDni());
         }
 
     }

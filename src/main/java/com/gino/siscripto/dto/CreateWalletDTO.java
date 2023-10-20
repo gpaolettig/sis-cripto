@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateWalletDTO {
-    private String dniUser;
+    private String dni;
     private Float saldo;
 }
