@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+
 public interface IUserService {
     User createUser(CreateUserDTO createUserDTO) throws ApiException;
     User getUser(String dni) throws ApiException;
