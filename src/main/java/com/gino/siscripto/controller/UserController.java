@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1")
 public class UserController {
 
-    @Qualifier("userServiceImpl")
     @Autowired
     private IUserService userService;
 
