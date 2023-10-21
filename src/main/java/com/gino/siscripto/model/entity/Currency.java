@@ -24,4 +24,11 @@ public class Currency {
     //billetera has divisa
     @OneToMany(mappedBy = "currency_ticker")
     private List<Holding> holdingList;
+
+    @OneToMany(mappedBy = "origin_currency_ticker", cascade = CascadeType.ALL)
+    private List<Transaction> transactions_o;
+    @OneToMany(mappedBy = "destination_currency_ticker", cascade = CascadeType.ALL)
+    private List<Transaction> transactions_d;
+
+
 }

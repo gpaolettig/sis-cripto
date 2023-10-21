@@ -1,6 +1,7 @@
 package com.gino.siscripto.model.entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,6 +28,12 @@ public class Wallet {
     private String dni_usuario; // La relacion es unidireccional de User a billetera, pq si almacenamos el usuario tenemos serialización infinita
     @Column(name = "saldo_billetera")
     private BigDecimal saldo;
+
     @OneToMany(mappedBy = "wallet_id") //mappedBy especifica el nombre del atributo en la entidad Holding que se utiliza para mapear esta relación
     private List<Holding> holdings;
+
+    @OneToMany(mappedBy = "origin_wallet_id", cascade = CascadeType.ALL)
+    private List<Transaction> transactions_o;
+    @OneToMany(mappedBy = "destination_wallet_id", cascade = CascadeType.ALL)
+    private List<Transaction> transactions_d;
 }
