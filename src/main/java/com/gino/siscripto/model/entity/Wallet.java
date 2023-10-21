@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.*;
 
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -24,5 +26,7 @@ public class Wallet {
     @Column(name="Usuario_DNI_usuario")
     private String dni_usuario; // La relacion es unidireccional de User a billetera, pq si almacenamos el usuario tenemos serialización infinita
     @Column(name = "saldo_billetera")
-    private Float saldo;
+    private BigDecimal saldo;
+    @OneToMany(mappedBy = "wallet_id") //mappedBy especifica el nombre del atributo en la entidad Holding que se utiliza para mapear esta relación
+    private List<Holding> holdings;
 }

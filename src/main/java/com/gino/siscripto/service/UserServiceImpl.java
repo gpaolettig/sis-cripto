@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +44,7 @@ public class UserServiceImpl implements IUserService {
         //Crear billetera (ya que si un usuario es creado se crea su billetera 1..*)
         List<Wallet>wallets= new ArrayList<>();
         Wallet wallet = new Wallet(); //el id lo genera JPA
-        wallet.setSaldo((float)0.0);
+        wallet.setSaldo(BigDecimal.ZERO);
         wallet.setDni_usuario(user.getDni());
         wallets.add(wallet);
         //asignar las wallets al user
