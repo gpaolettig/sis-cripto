@@ -8,6 +8,7 @@ import com.gino.siscripto.model.entity.User;
 import com.gino.siscripto.model.entity.Wallet;
 import com.gino.siscripto.repository.IUserDAO;
 import com.gino.siscripto.repository.IWalletDAO;
+import com.gino.siscripto.service.interfaces.IWalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +18,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class WalletServiceImpl implements IWalletService{
+public class WalletServiceImpl implements IWalletService {
     @Autowired
     private IWalletDAO iWalletDAO;
     @Autowired
@@ -62,7 +63,7 @@ public class WalletServiceImpl implements IWalletService{
     public Wallet updateWallet(UUID id, CreateWalletDTO createWalletDTO) throws ApiException {
         Optional<Wallet> wallet = iWalletDAO.findById(id);
         if(wallet.isPresent()){
-            //actualizo los atributos
+            //actualizo los atributos solo balance y dni
             wallet.get().setBalance(createWalletDTO.getBalance());
             wallet.get().setUserDNI(createWalletDTO.getDni());
             //actualizar en la bd

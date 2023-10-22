@@ -12,14 +12,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "divisa")
+@Table(name = "currency")
 public class Currency {
     @Id
-    @Column(name = "Ticker_divisa")
+    @Column(name = "ticker_currency")
     private String ticker;
-    @Column(name = "Nombre_divisa")
+    @Column(name = "name_currency")
     private String name;
-    @Column(name = "valor_divisa")
+    @Column(name = "value_currency")
     private BigDecimal value; //en ARS
     //billetera has divisa
     @OneToMany(mappedBy = "currency_ticker")

@@ -1,13 +1,11 @@
 package com.gino.siscripto.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -18,8 +16,9 @@ import java.util.UUID;
 @Table(name = "transaction")
 public class Transaction {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id_transaction")
-    private String idtransaction;
+    private long idtransaction;
     @Column(name = "datetime_transaction")
     private Timestamp date_transaction;
     @Column(name = "type_transaction")
@@ -34,8 +33,10 @@ public class Transaction {
     private UUID origin_wallet_id;
     @Column(name = "Wallet_id_wallet_d")
     private UUID destination_wallet_id;
-
-
+    @Column(name = "amount_transaction_o")
+    private BigDecimal origin_amount;
+    @Column(name = "amount_transaction_d")
+    private BigDecimal destination_amount;
 
 
 }

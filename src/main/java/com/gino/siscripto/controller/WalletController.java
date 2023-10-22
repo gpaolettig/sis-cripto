@@ -3,11 +3,9 @@ package com.gino.siscripto.controller;
 import com.gino.siscripto.dto.CreateWalletDTO;
 import com.gino.siscripto.exceptions.ApiException;
 import com.gino.siscripto.model.entity.Wallet;
-import com.gino.siscripto.service.IWalletService;
+import com.gino.siscripto.service.interfaces.IWalletService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

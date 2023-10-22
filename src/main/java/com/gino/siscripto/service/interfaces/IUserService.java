@@ -1,4 +1,4 @@
-package com.gino.siscripto.service;
+package com.gino.siscripto.service.interfaces;
 
 import com.gino.siscripto.dto.CreateUserDTO;
 import com.gino.siscripto.exceptions.ApiException;
