@@ -15,24 +15,24 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "transaccion")
+@Table(name = "transaction")
 public class Transaction {
     @Id
-    @Column(name="idTransaccion")
+    @Column(name="id_transaction")
     private String idtransaction;
-    @Column(name = "Fecha_hora_transaccion")
+    @Column(name = "datetime_transaction")
     private Timestamp date_transaction;
-    @Column(name = "tipo_transaccion")
+    @Column(name = "type_transaction")
     private String type;
 
-    @Column(name = "Divisa_Ticker_Origen")
+    @Column(name = "Currency_ticker_currency_o")
     private String origin_currency_ticker;
-    @Column(name = "Divisa_Ticker_Destino")
+    @Column(name = "Currency_ticker_currency_d")
     private String destination_currency_ticker;
 
-    @Column(name = "Billetera_id_Origen")
+    @Column(name = "Wallet_id_wallet_o")
     private UUID origin_wallet_id;
-    @Column(name = "Billetera_id_Destino")
+    @Column(name = "Wallet_id_wallet_d")
     private UUID destination_wallet_id;
 
 

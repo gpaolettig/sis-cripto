@@ -27,7 +27,7 @@ public class Wallet {
     @Column(name="User_dni_user")
     private String userDNI; // La relacion es unidireccional de User a billetera, pq si almacenamos el usuario tenemos serialización infinita
     @Column(name = "balance_wallet")
-    private BigDecimal balance;
+    private BigDecimal balance; //ARS
 
     @OneToMany(mappedBy = "wallet_id") //mappedBy especifica el nombre del atributo en la entidad Holding que se utiliza para mapear esta relación
     private List<Holding> holdings;

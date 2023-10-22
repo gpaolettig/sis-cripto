@@ -7,8 +7,8 @@ import java.io.Serializable;
 import java.util.UUID;
 @Embeddable
 public class HoldingKey implements Serializable {
-    @Column(name = "Billetera_id")
+    @Column(name = "Wallet_id_wallet")
     private UUID id_wallet;
-    @Column(name = "Divisa_ticker")
+    @Column(name = "Currency_ticker_currency")
     private String ticker_currency;
 }

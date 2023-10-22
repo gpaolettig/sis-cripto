@@ -19,14 +19,14 @@ public class Holding {
 
 
     @MapsId("id_wallet")//mapea con Holdingkey
-    @JoinColumn(name = "Billetera_id")
+    @JoinColumn(name = "Wallet_id_wallet")
     private UUID wallet_id;
 
 
     @MapsId("ticker_currency") //mapea con Holdingkey
-    @JoinColumn(name = "Divisa_ticker")
+    @JoinColumn(name = "Currency_ticker_currency")
     private String currency_ticker;
 
-    @Column(name = "valor_divisa")
-    BigDecimal amount;
+    @Column(name = "amount")
+    BigDecimal amount; //cantidad expresada en unidad
 }

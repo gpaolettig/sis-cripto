@@ -44,12 +44,13 @@ public class UserServiceImpl implements IUserService {
         Wallet wallet = new Wallet(); //el id lo genera JPA
         wallet.setBalance(BigDecimal.ZERO);
         wallet.setUserDNI(user.getDni());
+        //al crear una wallet no trae criptos ni transacciones, por lo tanto todas las list en null
         wallets.add(wallet);
         //asignar las wallets al user
         user.setWallets(wallets);
         //llamar un metodo del repositorio para guardarlo
         usuarioDAO.save(user);
-        return user;
+        return user; //podria retornar un dto solo con los datos del usuario para no retornar las wallets y todos los datos
 
     }
     @Transactional(readOnly = true)

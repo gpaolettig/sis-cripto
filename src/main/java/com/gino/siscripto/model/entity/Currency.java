@@ -20,7 +20,7 @@ public class Currency {
     @Column(name = "Nombre_divisa")
     private String name;
     @Column(name = "valor_divisa")
-    private BigDecimal value;
+    private BigDecimal value; //en ARS
     //billetera has divisa
     @OneToMany(mappedBy = "currency_ticker")
     private List<Holding> holdingList;
