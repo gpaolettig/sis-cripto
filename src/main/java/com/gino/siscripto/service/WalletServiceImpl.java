@@ -31,7 +31,7 @@ public class WalletServiceImpl implements IWalletService{
             Wallet wallet = new Wallet();
             // El ID se generará automáticamente
             wallet.setDni_usuario(createWalletDTO.getDni());
-            wallet.setSaldo(createWalletDTO.getSaldo());
+            wallet.setBalance(createWalletDTO.getBalance());
             // Guardar la billetera en la base de datos
             return iWalletDAO.save(wallet);
         } else {
@@ -63,7 +63,7 @@ public class WalletServiceImpl implements IWalletService{
         Optional<Wallet> wallet = iWalletDAO.findById(id);
         if(wallet.isPresent()){
             //actualizo los atributos
-            wallet.get().setSaldo(createWalletDTO.getSaldo());
+            wallet.get().setBalance(createWalletDTO.getBalance());
             wallet.get().setDni_usuario(createWalletDTO.getDni());
             //actualizar en la bd
             iWalletDAO.save(wallet.get());

@@ -18,12 +18,12 @@ public class Holding {
     private HoldingKey id;
 
 
-    @MapsId("id_wallet")
+    @MapsId("id_wallet")//mapea con Holdingkey
     @JoinColumn(name = "Billetera_id")
     private UUID wallet_id;
 
 
-    @MapsId("ticker_currency")
+    @MapsId("ticker_currency") //mapea con Holdingkey
     @JoinColumn(name = "Divisa_ticker")
     private String currency_ticker;
 

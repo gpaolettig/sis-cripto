@@ -17,17 +17,17 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "billetera")
+@Table(name = "wallet")
 public class Wallet {
     @Id
     @GeneratedValue
     @UuidGenerator(style = UuidGenerator.Style.TIME)
-    @Column(name = "id_billetera", updatable = false, nullable = false)
+    @Column(name = "id_wallet", updatable = false, nullable = false)
     private UUID id;
-    @Column(name="Usuario_DNI_usuario")
-    private String dni_usuario; // La relacion es unidireccional de User a billetera, pq si almacenamos el usuario tenemos serialización infinita
-    @Column(name = "saldo_billetera")
-    private BigDecimal saldo;
+    @Column(name="User_dni_user")
+    private String userDNI; // La relacion es unidireccional de User a billetera, pq si almacenamos el usuario tenemos serialización infinita
+    @Column(name = "balance_wallet")
+    private BigDecimal balance;
 
     @OneToMany(mappedBy = "wallet_id") //mappedBy especifica el nombre del atributo en la entidad Holding que se utiliza para mapear esta relación
     private List<Holding> holdings;

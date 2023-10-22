@@ -8,8 +8,6 @@ import com.gino.siscripto.model.entity.Wallet;
 import com.gino.siscripto.model.entity.User;
 import com.gino.siscripto.repository.IUserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,11 +29,11 @@ public class UserServiceImpl implements IUserService {
         //transformar el userDTO en user
         User user = new User();
         user.setDni(createUserDTO.getDni());
-        user.setNombre(createUserDTO.getNombre());
-        user.setApellido(createUserDTO.getApellido());
-        user.setSexo(createUserDTO.getSexo());
+        user.setName(createUserDTO.getName());
+        user.setSurname(createUserDTO.getSurname());
+        user.setGender(createUserDTO.getGender());
         user.setEmail(createUserDTO.getEmail());
-        user.setTelefono(createUserDTO.getTelefono());
+        user.setTel(createUserDTO.getTel());
 
         //Verifico si el usuario existe en la BD
         if(usuarioDAO.findById(createUserDTO.getDni()).isPresent()){
@@ -44,8 +42,8 @@ public class UserServiceImpl implements IUserService {
         //Crear billetera (ya que si un usuario es creado se crea su billetera 1..*)
         List<Wallet>wallets= new ArrayList<>();
         Wallet wallet = new Wallet(); //el id lo genera JPA
-        wallet.setSaldo(BigDecimal.ZERO);
-        wallet.setDni_usuario(user.getDni());
+        wallet.setBalance(BigDecimal.ZERO);
+        wallet.setUserDNI(user.getDni());
         wallets.add(wallet);
         //asignar las wallets al user
         user.setWallets(wallets);
@@ -81,11 +79,11 @@ public class UserServiceImpl implements IUserService {
         if (user.isPresent()) {
             User userExistente=user.get();
             // Actualizar los atributos del userExistente con los valores del DTO
-            userExistente.setNombre(createUserDTO.getNombre());
-            userExistente.setApellido(createUserDTO.getApellido());
-            userExistente.setSexo(createUserDTO.getSexo());
+            userExistente.setName(createUserDTO.getName());
+            userExistente.setSurname(createUserDTO.getSurname());
+            userExistente.setGender(createUserDTO.getGender());
             userExistente.setEmail(createUserDTO.getEmail());
-            userExistente.setTelefono(createUserDTO.getTelefono());
+            userExistente.setTel(createUserDTO.getTel());
             // Guardar el userExistente actualizado en la base de datos
             usuarioDAO.save(userExistente);
             return userExistente;

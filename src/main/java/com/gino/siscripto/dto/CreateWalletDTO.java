@@ -11,5 +11,5 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class CreateWalletDTO {
     private String dni;
-    private BigDecimal saldo;
+    private BigDecimal balance;
 }

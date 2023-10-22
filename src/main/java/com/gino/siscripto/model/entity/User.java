@@ -12,21 +12,21 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "usuario")
+@Table(name = "user")
 public class User implements Serializable {
     @Id
-    @Column(name = "DNI_usuario")
+    @Column(name = "dni_user")
     private String dni;
-    @Column(name = "Nombre_usuario")
-    private String nombre;
-    @Column(name = "Apellido_usuario")
-    private String apellido;
-    @Column(name = "sexo_usuario")
-    private String sexo;
-    @Column(name = "email_usuario")
+    @Column(name = "name_user")
+    private String name;
+    @Column(name = "surname_user")
+    private String surname;
+    @Column(name = "gender_user")
+    private String gender;
+    @Column(name = "email_user")
     private String email;
-    @Column(name = "telefono_usuario")
-    private String telefono;
-    @OneToMany(mappedBy = "dni_usuario", cascade = CascadeType.ALL)
+    @Column(name = "tel_user")
+    private String tel;
+    @OneToMany(mappedBy = "userDNI", cascade = CascadeType.ALL)
     private List<Wallet> wallets;
 }
