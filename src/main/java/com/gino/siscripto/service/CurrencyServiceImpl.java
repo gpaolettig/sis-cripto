@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CurrencyServiceImpl implements ICurrencyService {
@@ -55,5 +56,14 @@ public class CurrencyServiceImpl implements ICurrencyService {
             return new CurrencyDTO(currency.get().getTicker(),currency.get().getName(),currency.get().getValue());
         }
         throw new CurrencyDoesNotExist(ticker);
+    }
+
+    @Override
+    public Boolean currencyExist(String ticker) {
+        Optional<Currency> currency = iCurrencyDAO.findById(ticker);
+            if(currency.isPresent())
+                return true;
+            return false;
+
     }
 }

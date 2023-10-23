@@ -9,4 +9,5 @@ public interface ICurrencyService {
     CurrencyDTO createCurrency(CurrencyDTO currencyDTO) throws ApiException;
     CurrencyDTO updateCurrency(String ticker,CurrencyDTO currencyDTO) throws ApiException;
     CurrencyDTO deleteCurrency(String ticker) throws ApiException;
+    Boolean currencyExist(String ticker);
 }

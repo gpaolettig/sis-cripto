@@ -22,7 +22,7 @@ public class WalletServiceImpl implements IWalletService {
     @Autowired
     private IWalletDAO iWalletDAO;
     @Autowired
-    private IUserDAO iUserDAO;
+    private IUserDAO iUserDAO; //deberia usar el servicio y no el dao directamente
     @Transactional
     @Override
     public Wallet createWallet(CreateWalletDTO createWalletDTO) throws ApiException {
@@ -82,4 +82,13 @@ public class WalletServiceImpl implements IWalletService {
         }
         throw new WalletDoesNotExist(id);
     }
+
+    @Override
+    public Boolean walletExist(UUID id) {
+        Optional<Wallet> wallet = iWalletDAO.findById(id);
+        if(wallet.isPresent())
+            return true;
+        return false;
+    }
+
 }

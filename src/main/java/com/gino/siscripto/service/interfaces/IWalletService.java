@@ -15,6 +15,7 @@ public interface IWalletService {
     Wallet getWallet(UUID id) throws ApiException;
     List<Wallet> getAll(String dni_user) throws ApiException;
     Wallet updateWallet(UUID id,CreateWalletDTO createWalletDTO) throws ApiException;
-
     Wallet deleteWallet(UUID id) throws ApiException;
+
+    Boolean walletExist(UUID id);
 }

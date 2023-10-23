@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.UUID;
 @Embeddable
 public class HoldingKey implements Serializable {
@@ -11,4 +12,6 @@ public class HoldingKey implements Serializable {
     private UUID id_wallet;
     @Column(name = "Currency_ticker_currency")
     private String ticker_currency;
+    @Column(name="amount")
+    private BigDecimal amount_currency;
 }
