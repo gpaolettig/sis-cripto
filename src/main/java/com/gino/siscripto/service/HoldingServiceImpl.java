@@ -49,4 +49,16 @@ public class HoldingServiceImpl implements IHoldingService {
         }
         throw new HoldingDoesNotExist();
     }
+
+    @Override
+    public Holding updateHolding(Holding holdingrequest, HoldingKey key) throws ApiException {
+        Optional<Holding> holding = iHoldingDAO.findById(key);
+        if(holding.isPresent()){
+            holding.get().setId(holdingrequest.getId());
+            holding.get().setCurrency_ticker(holdingrequest.getCurrency_ticker());
+            holding.get().setAmount(holdingrequest.getAmount());
+            iHoldingDAO.save(holding.get());
+        }
+        throw new HoldingDoesNotExist();
+    }
 }

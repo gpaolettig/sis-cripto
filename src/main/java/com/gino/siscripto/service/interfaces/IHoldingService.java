@@ -11,4 +11,5 @@ public interface IHoldingService {
     Holding createHolding(Holding holding) throws ApiException;
     //update holding
     Holding deleteHolding(HoldingKey key) throws ApiException;
+    Holding updateHolding(Holding holdingrequest, HoldingKey key) throws ApiException;
 }
