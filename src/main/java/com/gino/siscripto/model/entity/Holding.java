@@ -26,7 +26,7 @@ public class Holding {
     @MapsId("ticker_currency") //mapea con Holdingkey
     @JoinColumn(name = "Currency_ticker_currency")
     private String currency_ticker;
-    @MapsId("amount_currency") //mapea con Holdingkey
+
     @Column(name = "amount")
     BigDecimal amount; //cantidad expresada en unidad
 }

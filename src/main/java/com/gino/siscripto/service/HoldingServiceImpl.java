@@ -1,11 +1,11 @@
 package com.gino.siscripto.service;
 
-import com.gino.siscripto.exceptions.ApiException;
-import com.gino.siscripto.exceptions.CurrencyDoesNotExist;
-import com.gino.siscripto.exceptions.WalletDoesNotExist;
+import com.gino.siscripto.exceptions.*;
 import com.gino.siscripto.model.entity.Currency;
 import com.gino.siscripto.model.entity.Holding;
+import com.gino.siscripto.model.entity.User;
 import com.gino.siscripto.model.entity.Wallet;
+import com.gino.siscripto.model.key.HoldingKey;
 import com.gino.siscripto.repository.IHoldingDAO;
 import com.gino.siscripto.repository.IWalletDAO;
 import com.gino.siscripto.service.interfaces.IHoldingService;
@@ -25,14 +25,28 @@ public class HoldingServiceImpl implements IHoldingService {
 
     @Override
     public Holding createHolding(Holding holding) throws ApiException {
-        //verificamos que exista la wallet
+        //verificamos que exista la wallet en la bd
         if (!walletService.walletExist(holding.getWallet_id())) {
             throw new WalletDoesNotExist(holding.getWallet_id());
         }
-        //verficamos que exista la currency
+        //verficamos que exista la currency en la bd
         if (!currencyService.currencyExist(holding.getCurrency_ticker())) {
             throw new CurrencyDoesNotExist(holding.getCurrency_ticker());
         }
-       return iHoldingDAO.save(holding);
+        /*Como ticker es unique, al insertar una entidad que ya existe en la tabla holding
+        es decir, misma billetera, mismo ticker, distinto amount Spring Data JPA
+        lo actualizará, hará match con la clave de holding
+        * */
+        return iHoldingDAO.save(holding);
+    }
+
+    @Override
+    public Holding deleteHolding(HoldingKey key) throws ApiException {
+        Optional<Holding> holding = iHoldingDAO.findById(key);
+        if(holding.isPresent()){
+            iHoldingDAO.delete(holding.get());
+            return holding.get();
+        }
+        throw new HoldingDoesNotExist();
     }
 }

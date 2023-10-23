@@ -12,6 +12,5 @@ public class HoldingKey implements Serializable {
     private UUID id_wallet;
     @Column(name = "Currency_ticker_currency")
     private String ticker_currency;
-    @Column(name="amount")
-    private BigDecimal amount_currency;
+
 }
