@@ -20,7 +20,7 @@ import java.util.UUID;
 @Service
 public class WalletServiceImpl implements IWalletService {
     @Autowired
-    private IWalletDAO iWalletDAO;
+    private IWalletDAO iWalletDAO; //mal
     @Autowired
     private IUserDAO iUserDAO; //deberia usar el servicio y no el dao directamente
     @Transactional

@@ -18,9 +18,9 @@ import java.util.Optional;
 public class HoldingServiceImpl implements IHoldingService {
    @Autowired
     private IHoldingDAO iHoldingDAO;
-   @Autowired
+   @Autowired //deberia usar la interfaz
     private WalletServiceImpl walletService;
-    @Autowired
+    @Autowired //deberia usar la interfaz
     private CurrencyServiceImpl currencyService;
 
     @Override

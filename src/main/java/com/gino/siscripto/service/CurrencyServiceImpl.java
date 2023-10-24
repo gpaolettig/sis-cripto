@@ -12,6 +12,7 @@ import com.gino.siscripto.service.interfaces.ICurrencyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -65,5 +66,9 @@ public class CurrencyServiceImpl implements ICurrencyService {
                 return true;
             return false;
 
+    }
+    @Override
+    public BigDecimal getPrice(String ticker){
+        return iCurrencyDAO.findById(ticker).get().getValue();
     }
 }

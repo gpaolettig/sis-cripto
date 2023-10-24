@@ -1,8 +1,11 @@
 package com.gino.siscripto.controller;
 
+import com.gino.siscripto.dto.CreateTransactionDTO;
 import com.gino.siscripto.dto.CreateUserDTO;
+import com.gino.siscripto.dto.TransactionSuccesfullyDTO;
 import com.gino.siscripto.exceptions.ApiException;
 import com.gino.siscripto.model.entity.User;
+import com.gino.siscripto.service.interfaces.ITransactionService;
 import com.gino.siscripto.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +18,8 @@ public class UserController {
 
     @Autowired
     private IUserService userService;
+    @Autowired
+    private ITransactionService transactionService;
 
 
     @PostMapping("/usuarios")
@@ -48,5 +53,12 @@ public class UserController {
 
    }
 
+   @PostMapping("/usuarios/transactions")
+        public ResponseEntity<?> createTransaction(@RequestBody CreateTransactionDTO transactiondto) throws ApiException {
+       TransactionSuccesfullyDTO succesfullyDTO = transactionService.createTransaction(transactiondto);
+       return new ResponseEntity<>(succesfullyDTO,HttpStatus.OK);
+    }
+   }
 
-}
+
+
