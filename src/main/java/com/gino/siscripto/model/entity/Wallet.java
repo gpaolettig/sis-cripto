@@ -29,7 +29,7 @@ public class Wallet {
     @Column(name = "balance_wallet")
     private BigDecimal balance; //ARS
 
-    @OneToMany(mappedBy = "wallet_id") //mappedBy especifica el nombre del atributo en la entidad Holding que se utiliza para mapear esta relación
+    @OneToMany(mappedBy = "id.id_wallet") //mappedBy especifica el nombre del atributo en la entidad Holding que se utiliza para mapear esta relación
     private List<Holding> holdings;
 
     @OneToMany(mappedBy = "origin_wallet_id", cascade = CascadeType.ALL)

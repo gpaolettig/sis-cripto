@@ -26,12 +26,12 @@ public class HoldingServiceImpl implements IHoldingService {
     @Override
     public Holding createHolding(Holding holding) throws ApiException {
         //verificamos que exista la wallet en la bd
-        if (!walletService.walletExist(holding.getWallet_id())) {
-            throw new WalletDoesNotExist(holding.getWallet_id());
+        if (!walletService.walletExist(holding.getId().getId_wallet())) {
+            throw new WalletDoesNotExist(holding.getId().getId_wallet());
         }
         //verficamos que exista la currency en la bd
-        if (!currencyService.currencyExist(holding.getCurrency_ticker())) {
-            throw new CurrencyDoesNotExist(holding.getCurrency_ticker());
+        if (!currencyService.currencyExist(holding.getId().getTicker_currency())) {
+            throw new CurrencyDoesNotExist(holding.getId().getTicker_currency());
         }
         /*Como ticker es unique, al insertar una entidad que ya existe en la tabla holding
         es decir, misma billetera, mismo ticker, distinto amount Spring Data JPA
@@ -55,7 +55,6 @@ public class HoldingServiceImpl implements IHoldingService {
         Optional<Holding> holding = iHoldingDAO.findById(key);
         if(holding.isPresent()){
             holding.get().setId(holdingrequest.getId());
-            holding.get().setCurrency_ticker(holdingrequest.getCurrency_ticker());
             holding.get().setAmount(holdingrequest.getAmount());
             iHoldingDAO.save(holding.get());
         }

@@ -17,16 +17,10 @@ public class Holding {
     @EmbeddedId
     private HoldingKey id;
 
-
-    @MapsId("id_wallet")//mapea con Holdingkey
-    @JoinColumn(name = "Wallet_id_wallet")
-    private UUID wallet_id;
-
-
-    @MapsId("ticker_currency") //mapea con Holdingkey
-    @JoinColumn(name = "Currency_ticker_currency")
-    private String currency_ticker;
-
     @Column(name = "amount")
     BigDecimal amount; //cantidad expresada en unidad
+
+    public Holding(HoldingKey holdingKey){
+        this.id = holdingKey;
+    }
 }

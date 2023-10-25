@@ -22,7 +22,7 @@ public class Currency {
     @Column(name = "value_currency")
     private BigDecimal value; //en ARS
     //billetera has divisa
-    @OneToMany(mappedBy = "currency_ticker")
+    @OneToMany(mappedBy = "id.ticker_currency")
     private List<Holding> holdingList;
 
     @OneToMany(mappedBy = "origin_currency_ticker", cascade = CascadeType.ALL)

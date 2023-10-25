@@ -7,6 +7,7 @@ import com.gino.siscripto.exceptions.CurrencyDoesNotExist;
 import com.gino.siscripto.exceptions.WalletDoesNotExist;
 import com.gino.siscripto.model.entity.Holding;
 import com.gino.siscripto.model.entity.Transaction;
+import com.gino.siscripto.model.key.HoldingKey;
 import com.gino.siscripto.repository.ITransactionDAO;
 import com.gino.siscripto.service.interfaces.ICurrencyService;
 import com.gino.siscripto.service.interfaces.IHoldingService;
@@ -36,14 +37,7 @@ public class TransactionServiceImpl implements ITransactionService {
     @Override
     public TransactionSuccesfullyDTO createTransaction(CreateTransactionDTO transactiondto) throws ApiException {
         //pasar de dto a obj
-        Transaction transaction = new Transaction();
-        transaction.setDate_transaction(getDateNow());
-        transaction.setType(transactiondto.getType());
-        transaction.setOrigin_currency_ticker(transactiondto.getOrigin_currency_ticker());
-        transaction.setDestination_currency_ticker(transactiondto.getDestination_currency_ticker());
-        transaction.setOrigin_wallet_id(transactiondto.getOrigin_wallet_id());
-        transaction.setDestination_wallet_id(transactiondto.getDestination_wallet_id());
-        transaction.setOrigin_amount(transactiondto.getOrigin_amount());
+        Transaction transaction = dtoToTransaction(transactiondto);
         checkCurrenciesExistence(transaction); //lanza posible exception
         checkWalletsExistence(transaction); //lanza posible exception
 
@@ -57,13 +51,23 @@ public class TransactionServiceImpl implements ITransactionService {
             BigDecimal origin_amount = transaction.getOrigin_amount();
             BigDecimal destination_amount = (origin_amount.multiply(priceCurrencyO)).divide(priceCurrencyD, RoundingMode.UNNECESSARY);
             transaction.setDestination_amount(destination_amount);
+
             //reflejar el intercambio en holding
-            Holding holding_walletO = new Holding(null,transaction.getOrigin_wallet_id(), transactiondto.getDestination_currency_ticker(), destination_amount);
-            Holding holding_walletD = new Holding(null,transaction.getDestination_wallet_id(), transactiondto.getOrigin_currency_ticker(),origin_amount);
+            //claves en holding
+            HoldingKey holdingKeyO = new HoldingKey(transaction.getOrigin_wallet_id(),transaction.getDestination_currency_ticker());
+            HoldingKey holdingKeyD = new HoldingKey(transaction.getDestination_wallet_id(),transaction.getOrigin_currency_ticker());
+            Holding holding_walletO = new Holding(holdingKeyO);
+            Holding holding_walletD = new Holding(holdingKeyD);
+            holding_walletO.setAmount(destination_amount);
+            holding_walletD.setAmount(origin_amount);
+
+
             holdingService.createHolding(holding_walletO);
             holdingService.createHolding(holding_walletD);
 
             Transaction transactionresponse = transactionDAO.save(transaction);
+            //reflejar el saldo
+            
 
             return  new TransactionSuccesfullyDTO(transactionresponse.getIdtransaction(),transactionresponse.getDate_transaction(),transactionresponse.getType(),transactionresponse.getOrigin_wallet_id(),transactionresponse.getDestination_wallet_id());
         }
@@ -96,6 +100,18 @@ public class TransactionServiceImpl implements ITransactionService {
         // Crea un objeto Timestamp a partir de la fecha y hora actual
         Timestamp timestamp = new Timestamp(fechaHoraActual.getTime());
         return timestamp;
+    }
+
+    private Transaction dtoToTransaction(CreateTransactionDTO transactiondto){
+        Transaction transaction = new Transaction();
+        transaction.setDate_transaction(getDateNow());
+        transaction.setType(transactiondto.getType());
+        transaction.setOrigin_currency_ticker(transactiondto.getOrigin_currency_ticker());
+        transaction.setDestination_currency_ticker(transactiondto.getDestination_currency_ticker());
+        transaction.setOrigin_wallet_id(transactiondto.getOrigin_wallet_id());
+        transaction.setDestination_wallet_id(transactiondto.getDestination_wallet_id());
+        transaction.setOrigin_amount(transactiondto.getOrigin_amount());
+        return transaction;
     }
 
     }
