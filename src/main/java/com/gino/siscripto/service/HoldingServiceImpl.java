@@ -12,6 +12,7 @@ import com.gino.siscripto.service.interfaces.IHoldingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @Service
@@ -47,17 +48,43 @@ public class HoldingServiceImpl implements IHoldingService {
             iHoldingDAO.delete(holding.get());
             return holding.get();
         }
-        throw new HoldingDoesNotExist();
+        throw new HoldingDoesNotExist(new Holding());
     }
 
     @Override
-    public Holding updateHolding(Holding holdingrequest, HoldingKey key) throws ApiException {
+    public Holding updateHolding(Holding holdingRequest, HoldingKey key, int flag) throws ApiException {
         Optional<Holding> holding = iHoldingDAO.findById(key);
+        BigDecimal amountFinal;
         if(holding.isPresent()){
-            holding.get().setId(holdingrequest.getId());
-            holding.get().setAmount(holdingrequest.getAmount());
-            iHoldingDAO.save(holding.get());
+            if(flag == 1) //recibió y ya tenia
+                amountFinal = holding.get().getAmount().add(holdingRequest.getAmount());
+            else //intercambio y descontó
+                amountFinal = holding.get().getAmount().subtract(holdingRequest.getAmount());
+
+            holding.get().setId(holdingRequest.getId());
+            holding.get().setAmount(amountFinal);
+             return iHoldingDAO.save(holding.get());
         }
-        throw new HoldingDoesNotExist();
+        throw new HoldingDoesNotExist(holdingRequest);
+    }
+
+    @Override
+    public Boolean checkHoldingAmount(Holding holding) throws ApiException {
+        Optional<Holding> holdingOptional = iHoldingDAO.findById(holding.getId());
+        if(holdingOptional.isPresent()){
+            int flag=holdingOptional.get().getAmount().compareTo(holding.getAmount());
+            //la tenencia es mayor que lo que se quiere intercambiar
+            return flag >= 0;
+        }
+        throw new HoldingDoesNotExist(holding); //o dar mas info
+    }
+    @Override
+    public Boolean checkHolding(HoldingKey holdingKey){
+        Optional<Holding> holdingOptional = iHoldingDAO.findById(holdingKey);
+        if(holdingOptional.isPresent()){
+            return true; //llamo al update
+        }
+        return  false; //llamo al create
+
     }
 }

@@ -4,7 +4,9 @@ import com.gino.siscripto.dto.CreateTransactionDTO;
 import com.gino.siscripto.dto.CreateUserDTO;
 import com.gino.siscripto.dto.TransactionSuccesfullyDTO;
 import com.gino.siscripto.exceptions.ApiException;
+import com.gino.siscripto.model.entity.Holding;
 import com.gino.siscripto.model.entity.User;
+import com.gino.siscripto.service.interfaces.IHoldingService;
 import com.gino.siscripto.service.interfaces.ITransactionService;
 import com.gino.siscripto.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,8 @@ public class UserController {
     private IUserService userService;
     @Autowired
     private ITransactionService transactionService;
+    @Autowired
+    private IHoldingService holdingService;
 
 
     @PostMapping("/usuarios")
@@ -57,6 +61,12 @@ public class UserController {
         public ResponseEntity<?> createTransaction(@RequestBody CreateTransactionDTO transactiondto) throws ApiException {
        TransactionSuccesfullyDTO succesfullyDTO = transactionService.createTransaction(transactiondto);
        return new ResponseEntity<>(succesfullyDTO,HttpStatus.OK);
+    }
+
+    @PostMapping("/usuarios/holdings")
+    public ResponseEntity<?> createHoldingPrueba(@RequestBody Holding holding) throws ApiException{
+        holdingService.createHolding(holding);
+        return new ResponseEntity<>(holding,HttpStatus.OK);
     }
    }
 

@@ -4,6 +4,7 @@ import com.gino.siscripto.dto.CreateTransactionDTO;
 import com.gino.siscripto.dto.TransactionSuccesfullyDTO;
 import com.gino.siscripto.exceptions.ApiException;
 import com.gino.siscripto.exceptions.CurrencyDoesNotExist;
+import com.gino.siscripto.exceptions.NotEnoughFunds;
 import com.gino.siscripto.exceptions.WalletDoesNotExist;
 import com.gino.siscripto.model.entity.Holding;
 import com.gino.siscripto.model.entity.Transaction;
@@ -22,6 +23,7 @@ import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 public class TransactionServiceImpl implements ITransactionService {
@@ -33,48 +35,73 @@ public class TransactionServiceImpl implements ITransactionService {
     private IWalletService walletService;
     @Autowired
     private IHoldingService holdingService;
+
     @Transactional
     @Override
     public TransactionSuccesfullyDTO createTransaction(CreateTransactionDTO transactiondto) throws ApiException {
-        //pasar de dto a obj
         Transaction transaction = dtoToTransaction(transactiondto);
         checkCurrenciesExistence(transaction); //lanza posible exception
         checkWalletsExistence(transaction); //lanza posible exception
 
-        //checkear que no sean ambas cripto igual, lanzar una exception personalizada
-        if(transaction.getType().equals("Intercambio")){
-            // checkear que tengan los fondos suficientes
+        if (transaction.getType().equals("Intercambio")) {
+            // Si la wallet de origen tiene la cantidad a intercambiar
+            if (checkHolding(transaction.getOrigin_wallet_id(), transaction.getOrigin_currency_ticker(), transaction.getOrigin_amount())) {
+                //Calcular la cantidad de criptomoneda de destino que recibira el usuario de origen
+                BigDecimal priceCurrencyO = currencyService.getPrice(transactiondto.getOrigin_currency_ticker());
+                BigDecimal priceCurrencyD = currencyService.getPrice(transactiondto.getDestination_currency_ticker());
+                BigDecimal origin_amount = transaction.getOrigin_amount();
+                BigDecimal destination_amount = (origin_amount.multiply(priceCurrencyO)).divide(priceCurrencyD, RoundingMode.UNNECESSARY);
+                transaction.setDestination_amount(destination_amount);
+                //si la wallet de destino posee la cantidad a intercambiar
+                if (checkHolding(transaction.getDestination_wallet_id(), transaction.getDestination_currency_ticker(), transaction.getDestination_amount())) {
 
-            //Calcular la cantidad de criptomoneda de destino que recibira el usuario de origen
-            BigDecimal priceCurrencyO = currencyService.getPrice(transactiondto.getOrigin_currency_ticker());
-            BigDecimal priceCurrencyD = currencyService.getPrice(transactiondto.getDestination_currency_ticker());
-            BigDecimal origin_amount = transaction.getOrigin_amount();
-            BigDecimal destination_amount = (origin_amount.multiply(priceCurrencyO)).divide(priceCurrencyD, RoundingMode.UNNECESSARY);
-            transaction.setDestination_amount(destination_amount);
+                    //Creamos las tenencias que van a recibir
+                    HoldingKey holdingKeyO = new HoldingKey(transaction.getOrigin_wallet_id(), transaction.getDestination_currency_ticker());
+                    HoldingKey holdingKeyD = new HoldingKey(transaction.getDestination_wallet_id(), transaction.getOrigin_currency_ticker());
+                    Holding holding_walletO = new Holding(holdingKeyO);
+                    Holding holding_walletD = new Holding(holdingKeyD);
+                    holding_walletO.setAmount(destination_amount);
+                    holding_walletD.setAmount(origin_amount);
 
-            //reflejar el intercambio en holding
-            //claves en holding
-            HoldingKey holdingKeyO = new HoldingKey(transaction.getOrigin_wallet_id(),transaction.getDestination_currency_ticker());
-            HoldingKey holdingKeyD = new HoldingKey(transaction.getDestination_wallet_id(),transaction.getOrigin_currency_ticker());
-            Holding holding_walletO = new Holding(holdingKeyO);
-            Holding holding_walletD = new Holding(holdingKeyD);
-            holding_walletO.setAmount(destination_amount);
-            holding_walletD.setAmount(origin_amount);
+                    //Reflejar en holding, verificamos si ambas wallet ya tenian esa cantidad a recibir o no
+                    //Si ya tiene la cripto que va a recibir en su wallet
+                    //Wallet Origen
+                    if (holdingService.checkHolding(holdingKeyO))
+                        holdingService.updateHolding(holding_walletO,holdingKeyO,1);
+                    else //no tiene esa cripto en su wallet
+                        holdingService.createHolding(holding_walletO);
 
+                    //Wallet destino
+                    if (holdingService.checkHolding(holdingKeyD))
+                        holdingService.updateHolding(holding_walletD,holdingKeyD,1);
+                    else //no tiene esa cripto en su wallet
+                        holdingService.createHolding(holding_walletD);
 
-            holdingService.createHolding(holding_walletO);
-            holdingService.createHolding(holding_walletD);
+                    //Eliminar las tenencias que intercambiaron
 
-            Transaction transactionresponse = transactionDAO.save(transaction);
-            //reflejar el saldo
-            
+                    HoldingKey deleteHoldingKeyO = new HoldingKey(transaction.getOrigin_wallet_id(),transaction.getOrigin_currency_ticker());
+                    HoldingKey deleteHoldingKeyD = new HoldingKey(transaction.getDestination_wallet_id(),transaction.getDestination_currency_ticker());
+                    Holding deleteHoldingO = new Holding(deleteHoldingKeyO,transaction.getOrigin_amount());
+                    Holding deleteHoldingD = new Holding(deleteHoldingKeyD,transaction.getDestination_amount());
 
-            return  new TransactionSuccesfullyDTO(transactionresponse.getIdtransaction(),transactionresponse.getDate_transaction(),transactionresponse.getType(),transactionresponse.getOrigin_wallet_id(),transactionresponse.getDestination_wallet_id());
-        }
-            return new TransactionSuccesfullyDTO();
+                    holdingService.updateHolding(deleteHoldingO,deleteHoldingKeyO,0);
+                    holdingService.updateHolding(deleteHoldingD,deleteHoldingKeyD,0);
+
+                    Transaction transactionresponse = transactionDAO.save(transaction);
+                    //actualizar saldo de ambas wallet
+                    return new TransactionSuccesfullyDTO(transactionresponse.getIdtransaction(), transactionresponse.getDate_transaction(), transactionresponse.getType(), transactionresponse.getOrigin_wallet_id(), transactionresponse.getDestination_wallet_id());
+                } else {
+                    throw new NotEnoughFunds(transaction.getDestination_wallet_id());
+                }
+            } else {
+                throw new NotEnoughFunds(transaction.getOrigin_wallet_id());
+            }
+
+        } return new TransactionSuccesfullyDTO();
 
     }
-    private void checkCurrenciesExistence(Transaction transaction) throws ApiException{
+
+    private void checkCurrenciesExistence(Transaction transaction) throws ApiException {
         Boolean booleanCurrencyO = currencyService.currencyExist(transaction.getOrigin_currency_ticker());
         Boolean booleanCurrencyD = currencyService.currencyExist(transaction.getDestination_currency_ticker());
         if (!(booleanCurrencyO) || !(booleanCurrencyD)) {
@@ -83,7 +110,8 @@ public class TransactionServiceImpl implements ITransactionService {
             throw new CurrencyDoesNotExist(transaction.getDestination_currency_ticker());
         }
     }
-    private void checkWalletsExistence(Transaction transaction) throws ApiException{
+
+    private void checkWalletsExistence(Transaction transaction) throws ApiException {
         Boolean booleanWalletO = walletService.walletExist(transaction.getOrigin_wallet_id());
         Boolean booleanWalletD = walletService.walletExist(transaction.getDestination_wallet_id());
         if (!(booleanWalletO) || !(booleanWalletD)) {
@@ -93,7 +121,8 @@ public class TransactionServiceImpl implements ITransactionService {
         }
 
     }
-    private Timestamp getDateNow(){
+
+    private Timestamp getDateNow() {
         Calendar calendar = Calendar.getInstance();
         // Convierte el Calendar en un objeto Date
         Date fechaHoraActual = calendar.getTime();
@@ -102,7 +131,7 @@ public class TransactionServiceImpl implements ITransactionService {
         return timestamp;
     }
 
-    private Transaction dtoToTransaction(CreateTransactionDTO transactiondto){
+    private Transaction dtoToTransaction(CreateTransactionDTO transactiondto) {
         Transaction transaction = new Transaction();
         transaction.setDate_transaction(getDateNow());
         transaction.setType(transactiondto.getType());
@@ -114,5 +143,11 @@ public class TransactionServiceImpl implements ITransactionService {
         return transaction;
     }
 
+    private Boolean checkHolding(UUID idWallet, String ticker, BigDecimal amount) throws ApiException {
+        HoldingKey holdingKey = new HoldingKey(idWallet, ticker);
+        Holding requieredHolding = new Holding(holdingKey, amount);
+        return holdingService.checkHoldingAmount(requieredHolding);
     }
+
+}
 
