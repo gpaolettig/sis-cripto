@@ -13,12 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class WalletServiceImpl implements IWalletService {
+    //hacer un metodo que busque una wallet y la retorne así no repetis codigo
     @Autowired
     private IWalletDAO iWalletDAO; //mal
     @Autowired
@@ -86,9 +88,18 @@ public class WalletServiceImpl implements IWalletService {
     @Override
     public Boolean walletExist(UUID id) {
         Optional<Wallet> wallet = iWalletDAO.findById(id);
-        if(wallet.isPresent())
+        return wallet.isPresent();
+    }
+
+    @Override
+    public Boolean UpdateBalance(UUID id, BigDecimal balance) {
+        Optional<Wallet> wallet = iWalletDAO.findById(id);
+        if (wallet.isPresent()) {
+            wallet.get().setBalance(wallet.get().getBalance().add(balance));
             return true;
+        }
         return false;
     }
+
 
 }

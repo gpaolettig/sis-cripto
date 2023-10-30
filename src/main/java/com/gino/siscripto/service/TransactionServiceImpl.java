@@ -88,7 +88,7 @@ public class TransactionServiceImpl implements ITransactionService {
                     holdingService.updateHolding(deleteHoldingD,deleteHoldingKeyD,0);
 
                     Transaction transactionresponse = transactionDAO.save(transaction);
-                    //actualizar saldo de ambas wallet
+
                     return new TransactionSuccesfullyDTO(transactionresponse.getIdtransaction(), transactionresponse.getDate_transaction(), transactionresponse.getType(), transactionresponse.getOrigin_wallet_id(), transactionresponse.getDestination_wallet_id());
                 } else {
                     throw new NotEnoughFunds(transaction.getDestination_wallet_id());
