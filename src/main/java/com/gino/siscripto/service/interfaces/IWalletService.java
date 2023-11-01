@@ -2,10 +2,7 @@ package com.gino.siscripto.service.interfaces;
 
 import com.gino.siscripto.dto.CreateWalletDTO;
 import com.gino.siscripto.exceptions.ApiException;
-import com.gino.siscripto.exceptions.UserDoesNotExists;
-import com.gino.siscripto.exceptions.WalletDoesNotExist;
 import com.gino.siscripto.model.entity.Wallet;
-import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,5 +15,5 @@ public interface IWalletService {
     Wallet updateWallet(UUID id,CreateWalletDTO createWalletDTO) throws ApiException;
     Wallet deleteWallet(UUID id) throws ApiException;
     Boolean walletExist(UUID id);
-    Boolean UpdateBalance(UUID id, BigDecimal balance);
+    Boolean updateBalance(UUID id, BigDecimal balance, int flag);
 }

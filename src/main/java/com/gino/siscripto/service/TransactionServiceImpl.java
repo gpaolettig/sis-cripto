@@ -40,9 +40,8 @@ public class TransactionServiceImpl implements ITransactionService {
     @Override
     public TransactionSuccesfullyDTO createTransaction(CreateTransactionDTO transactiondto) throws ApiException {
         Transaction transaction = dtoToTransaction(transactiondto);
-        checkCurrenciesExistence(transaction); //lanza posible exception
-        checkWalletsExistence(transaction); //lanza posible exception
-
+        checkCurrenciesExistence(transaction);
+        checkWalletsExistence(transaction);
         if (transaction.getType().equals("Intercambio")) {
             // Si la wallet de origen tiene la cantidad a intercambiar
             if (checkHolding(transaction.getOrigin_wallet_id(), transaction.getOrigin_currency_ticker(), transaction.getOrigin_amount())) {
@@ -54,7 +53,6 @@ public class TransactionServiceImpl implements ITransactionService {
                 transaction.setDestination_amount(destination_amount);
                 //si la wallet de destino posee la cantidad a intercambiar
                 if (checkHolding(transaction.getDestination_wallet_id(), transaction.getDestination_currency_ticker(), transaction.getDestination_amount())) {
-
                     //Creamos las tenencias que van a recibir
                     HoldingKey holdingKeyO = new HoldingKey(transaction.getOrigin_wallet_id(), transaction.getDestination_currency_ticker());
                     HoldingKey holdingKeyD = new HoldingKey(transaction.getDestination_wallet_id(), transaction.getOrigin_currency_ticker());
@@ -83,10 +81,8 @@ public class TransactionServiceImpl implements ITransactionService {
                     HoldingKey deleteHoldingKeyD = new HoldingKey(transaction.getDestination_wallet_id(),transaction.getDestination_currency_ticker());
                     Holding deleteHoldingO = new Holding(deleteHoldingKeyO,transaction.getOrigin_amount());
                     Holding deleteHoldingD = new Holding(deleteHoldingKeyD,transaction.getDestination_amount());
-
                     holdingService.updateHolding(deleteHoldingO,deleteHoldingKeyO,0);
                     holdingService.updateHolding(deleteHoldingD,deleteHoldingKeyD,0);
-
                     Transaction transactionresponse = transactionDAO.save(transaction);
 
                     return new TransactionSuccesfullyDTO(transactionresponse.getIdtransaction(), transactionresponse.getDate_transaction(), transactionresponse.getType(), transactionresponse.getOrigin_wallet_id(), transactionresponse.getDestination_wallet_id());

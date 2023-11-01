@@ -57,11 +57,6 @@ public class UserController {
 
    }
 
-   @PostMapping("/usuarios/transactions")
-        public ResponseEntity<?> createTransaction(@RequestBody CreateTransactionDTO transactiondto) throws ApiException {
-       TransactionSuccesfullyDTO succesfullyDTO = transactionService.createTransaction(transactiondto);
-       return new ResponseEntity<>(succesfullyDTO,HttpStatus.OK);
-    }
 
     @PostMapping("/usuarios/holdings")
     public ResponseEntity<?> createHoldingPrueba(@RequestBody Holding holding) throws ApiException{

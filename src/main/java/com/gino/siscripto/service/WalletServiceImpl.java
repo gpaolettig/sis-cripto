@@ -92,10 +92,13 @@ public class WalletServiceImpl implements IWalletService {
     }
 
     @Override
-    public Boolean UpdateBalance(UUID id, BigDecimal balance) {
+    public Boolean updateBalance(UUID id, BigDecimal balance, int flag) {
         Optional<Wallet> wallet = iWalletDAO.findById(id);
         if (wallet.isPresent()) {
-            wallet.get().setBalance(wallet.get().getBalance().add(balance));
+            if(flag==1) //Se agregaron criptos --> ingreso dinero
+                wallet.get().setBalance(wallet.get().getBalance().add(balance));
+            if(flag==0) //Se intercambio cripto --> egreso de dinero
+                wallet.get().setBalance(wallet.get().getBalance().subtract(balance));
             return true;
         }
         return false;
