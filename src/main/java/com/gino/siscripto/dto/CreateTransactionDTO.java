@@ -16,5 +16,6 @@ public class CreateTransactionDTO {
     private UUID origin_wallet_id;
     private UUID destination_wallet_id;
     private BigDecimal origin_amount;
+    //destino para los depositos
     //solo el monto de origen, un usario quiere intercambiar x btc por eth, el servicio calcula la cantidad de destino
 }
