@@ -11,11 +11,12 @@ import java.util.UUID;
 @NoArgsConstructor
 public class CreateTransactionDTO {
     private String type;
-    private String origin_currency_ticker;
+    private String origin_currency_ticker; //null --> deposito
     private String destination_currency_ticker;
-    private UUID origin_wallet_id;
+    private UUID origin_wallet_id;//null --> deposito
     private UUID destination_wallet_id;
-    private BigDecimal origin_amount;
-    //destino para los depositos
-    //solo el monto de origen, un usario quiere intercambiar x btc por eth, el servicio calcula la cantidad de destino
+    private BigDecimal origin_amount; //null --> deposito
+    //para intercambio, se determina en ejecución (equivalencia), para deposito es obligatorio
+    private BigDecimal destination_amount;
+
 }

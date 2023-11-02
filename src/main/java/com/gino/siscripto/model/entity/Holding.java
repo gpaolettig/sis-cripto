@@ -16,7 +16,6 @@ import java.util.UUID;
 public class Holding {
     @EmbeddedId
     private HoldingKey id;
-
     @Column(name = "amount")
     BigDecimal amount; //cantidad expresada en unidad
 

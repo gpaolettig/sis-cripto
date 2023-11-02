@@ -40,15 +40,10 @@ public class HoldingServiceImpl implements IHoldingService {
         BigDecimal price = currencyService.getPrice(holding.getId().getTicker_currency());
         BigDecimal balance = holding.getAmount().multiply(price);//valor en ars
         //actualiza el saldo
-        walletService.updateBalance(holding.getId().getId_wallet(), balance,1);
-
-        if (checkHolding(holding.getId())) { //ya tiene criptos que quiere depositar
-            return updateHolding(holding, holding.getId(), 1);
-        } else { //no tiene esa cripto --> la crea
-            return iHoldingDAO.save(holding);
-        }
-
+        walletService.updateBalance(holding.getId().getId_wallet(), balance, 1);
+        return iHoldingDAO.save(holding);
     }
+
 
     @Override
     public Holding deleteHolding(HoldingKey key) throws ApiException {
@@ -56,7 +51,7 @@ public class HoldingServiceImpl implements IHoldingService {
         Optional<Holding> holding = iHoldingDAO.findById(key);
         if (holding.isPresent()) {
             iHoldingDAO.delete(holding.get());
-            walletService.updateBalance(key.getId_wallet(),BigDecimal.ZERO,0);
+            walletService.updateBalance(key.getId_wallet(), BigDecimal.ZERO, 0);
             return holding.get();
         }
         throw new HoldingDoesNotExist(new Holding());
@@ -72,18 +67,13 @@ public class HoldingServiceImpl implements IHoldingService {
             BigDecimal price = currencyService.getPrice(holding.get().getId().getTicker_currency());
             if (flag == 1) { //recibió y ya tenia
                 amountFinal = holding.get().getAmount().add(holdingRequest.getAmount());
-                BigDecimal balance = amountFinal.multiply(price);//valor en ars
+                BigDecimal balance = holdingRequest.getAmount().multiply(price);
                 walletService.updateBalance(holding.get().getId().getId_wallet(), balance, 1);
-            }else { //intercambio y descontó
-                //cantidad que tiene de criptos descontadas las que intercambio
-                BigDecimal balancePreview = holding.get().getAmount().multiply(price); //valor en ars de sus criptos
+            } else { //intercambio y descontó
                 //descuento la cantida de la cripto
                 amountFinal = holding.get().getAmount().subtract(holdingRequest.getAmount());
-                //saldo de la cantidad de cripto que debería tener una vez descontado
-                BigDecimal balanceHolding = amountFinal.multiply(price);
-                //precio final para descontar del saldo del wallet (la diferencia)
-               BigDecimal balanceSubstract = balancePreview.subtract(balanceHolding);
-                walletService.updateBalance(holding.get().getId().getId_wallet(), balanceSubstract,0);
+                BigDecimal balance = holdingRequest.getAmount().multiply(price);
+                walletService.updateBalance(holding.get().getId().getId_wallet(), balance, 0);
             }
             holding.get().setId(holdingRequest.getId());
             holding.get().setAmount(amountFinal);

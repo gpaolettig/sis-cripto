@@ -43,7 +43,7 @@ public class TransactionServiceImpl implements ITransactionService {
         if (transaction.getType().equals("Intercambio")) {
             checkCurrenciesExistence(transaction);
             checkWalletsExistence(transaction);
-            // Si la wallet de origen tiene la cantidad a intercambiar
+            // Si la wallet de origen posee la cantidad a intercambiar
             if (checkHolding(transaction.getOrigin_wallet_id(), transaction.getOrigin_currency_ticker(), transaction.getOrigin_amount())) {
                 //Calcular la cantidad de criptomoneda de destino que recibira el usuario de origen
                 BigDecimal priceCurrencyO = currencyService.getPrice(transactiondto.getOrigin_currency_ticker());
@@ -53,7 +53,7 @@ public class TransactionServiceImpl implements ITransactionService {
                 transaction.setDestination_amount(destination_amount);
                 //si la wallet de destino posee la cantidad a intercambiar
                 if (checkHolding(transaction.getDestination_wallet_id(), transaction.getDestination_currency_ticker(), transaction.getDestination_amount())) {
-                    //Creamos las tenencias que van a recibir
+                    //Creamos las tenencias que van a recibir ambas wallets
                     HoldingKey holdingKeyO = new HoldingKey(transaction.getOrigin_wallet_id(), transaction.getDestination_currency_ticker());
                     HoldingKey holdingKeyD = new HoldingKey(transaction.getDestination_wallet_id(), transaction.getOrigin_currency_ticker());
                     Holding holding_walletO = new Holding(holdingKeyO);
@@ -61,7 +61,6 @@ public class TransactionServiceImpl implements ITransactionService {
                     holding_walletO.setAmount(destination_amount);
                     holding_walletD.setAmount(origin_amount);
 
-                    //Reflejar en holding, verificamos si ambas wallet ya tenian esa cantidad a recibir o no
                     //Si ya tiene la cripto que va a recibir en su wallet
                     //Wallet Origen
                     if (holdingService.checkHolding(holdingKeyO))
@@ -94,9 +93,10 @@ public class TransactionServiceImpl implements ITransactionService {
         if (transaction.getType().equals("Deposito")){
             HoldingKey key = new HoldingKey(transaction.getDestination_wallet_id(),transaction.getDestination_currency_ticker());
             Holding holding = new Holding(key,transaction.getDestination_amount());
-            if (holdingService.checkHolding(key))
-                holdingService.updateHolding(holding,key,1);
-            holdingService.createHolding(holding);
+            if (holdingService.checkHolding(key)) //si ya posee criptos
+                holdingService.updateHolding(holding, key, 1); //actualizo
+            else
+                holdingService.createHolding(holding); //si no, creo
         }
         Transaction transactionResponse = transactionDAO.save(transaction);
         return new TransactionSuccesfullyDTO(transactionResponse.getIdtransaction(), transactionResponse.getDate_transaction(), transactionResponse.getType(), transactionResponse.getOrigin_wallet_id(), transactionResponse.getDestination_wallet_id());
@@ -137,11 +137,16 @@ public class TransactionServiceImpl implements ITransactionService {
         Transaction transaction = new Transaction();
         transaction.setDate_transaction(getDateNow());
         transaction.setType(transactiondto.getType());
-        transaction.setOrigin_currency_ticker(transactiondto.getOrigin_currency_ticker());
+        if(transactiondto.getOrigin_currency_ticker().isEmpty())
+            transaction.setOrigin_currency_ticker(null);
+        else
+            transaction.setOrigin_currency_ticker(transactiondto.getOrigin_currency_ticker());
         transaction.setDestination_currency_ticker(transactiondto.getDestination_currency_ticker());
         transaction.setOrigin_wallet_id(transactiondto.getOrigin_wallet_id());
         transaction.setDestination_wallet_id(transactiondto.getDestination_wallet_id());
         transaction.setOrigin_amount(transactiondto.getOrigin_amount());
+        //deposito
+        transaction.setDestination_amount(transactiondto.getDestination_amount());
         return transaction;
     }
 
