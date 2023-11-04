@@ -24,13 +24,13 @@ public class UserController {
 
     @PostMapping("/usuarios")
     public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) throws ApiException {
-       return new ResponseEntity<>(userService.createUser(userDTO), HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.createUser(userDTO), HttpStatus.CREATED);
     }
 
     //get user por dni
     @GetMapping("/usuarios/{dni}")
     public ResponseEntity<?> get(@PathVariable String dni) throws ApiException {
-        return new ResponseEntity<>(userService.getUser(dni),HttpStatus.OK);
+        return new ResponseEntity<>(userService.getUser(dni), HttpStatus.OK);
     }
 
     //get users
@@ -38,24 +38,20 @@ public class UserController {
     public ResponseEntity<?> getAll() throws ApiException {
         return new ResponseEntity<>(userService.getAll(), HttpStatus.OK);
     }
+
     @PutMapping("/usuarios/{dni}") //me pasan los datos que quiero modificar en el dto
     public ResponseEntity<?> update(@RequestBody UserDTO userDTO, @PathVariable String dni) throws ApiException {
         return new ResponseEntity<>(userService.updateUser(dni, userDTO), HttpStatus.OK);
 
-   }
-   @DeleteMapping("/usuarios/{dni}")
-   public ResponseEntity<?> delete(@PathVariable String dni) throws ApiException {
-       return new ResponseEntity<>(userService.deleteUser(dni),HttpStatus.OK);
-
-   }
-
-
-    @PostMapping("/usuarios/holdings")
-    public ResponseEntity<?> createHoldingPrueba(@RequestBody Holding holding) throws ApiException{
-        holdingService.createHolding(holding);
-        return new ResponseEntity<>(holding,HttpStatus.OK);
     }
-   }
+
+    @DeleteMapping("/usuarios/{dni}")
+    public ResponseEntity<?> delete(@PathVariable String dni) throws ApiException {
+        return new ResponseEntity<>(userService.deleteUser(dni), HttpStatus.OK);
+
+    }
+
+}
 
 
 
