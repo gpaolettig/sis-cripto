@@ -1,6 +1,6 @@
 package com.gino.siscripto.controller;
 
-import com.gino.siscripto.dto.CreateWalletDTO;
+import com.gino.siscripto.dto.WalletDTO;
 import com.gino.siscripto.exceptions.ApiException;
 import com.gino.siscripto.model.entity.Wallet;
 import com.gino.siscripto.service.interfaces.IWalletService;
@@ -20,25 +20,21 @@ public class WalletController {
     IWalletService iWalletService;
 
     @PostMapping("/wallets")
-    public ResponseEntity<?> createWallet(@RequestBody CreateWalletDTO createWalletDTO) throws ApiException {
-        Wallet wallet = iWalletService.createWallet(createWalletDTO);
-        return new ResponseEntity<>(wallet, HttpStatus.CREATED);
+    public ResponseEntity<?> createWallet(@RequestBody WalletDTO walletDTO) throws ApiException {
+        return new ResponseEntity<>(iWalletService.createWallet(walletDTO), HttpStatus.CREATED);
     }
     @GetMapping("/wallets/{id}")
     public ResponseEntity<?>getWallet(@PathVariable UUID id) throws ApiException{
-        Wallet wallet = iWalletService.getWallet(id);
-        return new ResponseEntity<>(wallet,HttpStatus.OK);
+        return new ResponseEntity<>(iWalletService.getWallet(id),HttpStatus.OK);
     }
     @GetMapping("/wallets/user/{dni}")
     public ResponseEntity<?> getAll(@PathVariable String dni) throws ApiException{
-        List<Wallet> wallets = iWalletService.getAll(dni);
-        return new ResponseEntity<>(wallets,HttpStatus.OK);
+        return new ResponseEntity<>(iWalletService.getAll(dni),HttpStatus.OK);
 
     }
     @PutMapping("/wallets/{id}")
-    public ResponseEntity<?>updateWallet(@PathVariable UUID id, @RequestBody CreateWalletDTO createWalletDTO)throws ApiException{
-        Wallet wallet = iWalletService.updateWallet(id,createWalletDTO);
-        return new ResponseEntity<>(wallet,HttpStatus.OK);
+    public ResponseEntity<?>updateWallet(@PathVariable UUID id, @RequestBody WalletDTO walletDTO)throws ApiException{
+        return new ResponseEntity<>(iWalletService.updateWallet(id, walletDTO),HttpStatus.OK);
     }
     @DeleteMapping("/wallets/{id}")
     public ResponseEntity<?>deleteWallet(@PathVariable UUID id) throws ApiException{

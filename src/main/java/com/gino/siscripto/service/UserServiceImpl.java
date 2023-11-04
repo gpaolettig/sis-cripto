@@ -47,8 +47,7 @@ public class UserServiceImpl implements IUserService {
         user.setWallets(wallets);
         //llamar un metodo del repositorio para guardarlo
         usuarioDAO.save(user);
-        UserDTO dto =modelMapper.map(user,UserDTO.class);
-        return dto;
+        return modelMapper.map(user,UserDTO.class);
     }
     @Transactional(readOnly = true)
     @Override
@@ -71,7 +70,6 @@ public class UserServiceImpl implements IUserService {
         Si el objeto pasado a save no tiene un ID (o su ID es nulo), Spring Data JPA lo considerará un nuevo objeto y generará
         una sentencia SQL de inserción para agregarlo como un nuevo registro en la base de datos.
         */
-
         // Verificar si el usuario existe en la BD
         Optional<User> user = usuarioDAO.findById(dni);
         if (user.isPresent()) {
