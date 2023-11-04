@@ -5,6 +5,7 @@ import com.gino.siscripto.exceptions.ApiException;
 import com.gino.siscripto.model.entity.User;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface IUserService {
@@ -13,4 +14,5 @@ public interface IUserService {
     UserDTO updateUser(String dni, UserDTO userDTO) throws ApiException;
     UserDTO deleteUser(String dni) throws ApiException;
     List<UserDTO> getAll() throws ApiException;
+    Optional<User> getUserOptional(String dni);
 }

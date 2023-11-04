@@ -40,5 +40,14 @@ public class WalletController {
     public ResponseEntity<?>deleteWallet(@PathVariable UUID id) throws ApiException{
         return new ResponseEntity<>(iWalletService.deleteWallet(id),HttpStatus.OK);
     }
+    @GetMapping("/wallets/balance/{id}")
+    public ResponseEntity<?> getBalance(@PathVariable UUID id) throws ApiException{
+        return new ResponseEntity<>(iWalletService.getBalance(id),HttpStatus.OK);
+    }
+    @GetMapping("/wallets/user/balance/{dni}")
+    public ResponseEntity<?> getAllBalance(@PathVariable String dni) throws ApiException{
+        return new ResponseEntity<>(iWalletService.getAllBalance(dni),HttpStatus.OK);
+    }
+
 
 }

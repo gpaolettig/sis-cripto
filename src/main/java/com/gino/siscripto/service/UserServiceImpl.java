@@ -110,4 +110,11 @@ public class UserServiceImpl implements IUserService {
         return users.stream().map(user -> modelMapper.map(user, UserDTO.class))
                 .collect(Collectors.toList());
     }
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<User> getUserOptional(String dni)  {
+        return usuarioDAO.findById(dni);
+    }
+
+
 }

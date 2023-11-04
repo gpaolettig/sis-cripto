@@ -6,6 +6,7 @@ import com.gino.siscripto.model.entity.Wallet;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface IWalletService {
@@ -16,4 +17,6 @@ public interface IWalletService {
     WalletDTO deleteWallet(UUID id) throws ApiException;
     Boolean walletExist(UUID id);
     Boolean updateBalance(UUID id, BigDecimal balance, int flag);
+    BigDecimal getBalance(UUID id) throws ApiException;
+    BigDecimal getAllBalance(String dni) throws ApiException;
 }
