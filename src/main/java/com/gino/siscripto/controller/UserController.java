@@ -24,15 +24,13 @@ public class UserController {
 
     @PostMapping("/usuarios")
     public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) throws ApiException {
-      UserDTO userDtoResponse = userService.createUser(userDTO);
-       return new ResponseEntity<>(userDtoResponse, HttpStatus.CREATED);
+       return new ResponseEntity<>(userService.createUser(userDTO), HttpStatus.CREATED);
     }
 
     //get user por dni
     @GetMapping("/usuarios/{dni}")
     public ResponseEntity<?> get(@PathVariable String dni) throws ApiException {
-        UserDTO userdto= userService.getUser(dni);
-        return new ResponseEntity<>(userdto,HttpStatus.OK);
+        return new ResponseEntity<>(userService.getUser(dni),HttpStatus.OK);
     }
 
     //get users
@@ -42,14 +40,12 @@ public class UserController {
     }
     @PutMapping("/usuarios/{dni}") //me pasan los datos que quiero modificar en el dto
     public ResponseEntity<?> update(@RequestBody UserDTO userDTO, @PathVariable String dni) throws ApiException {
-        UserDTO userdto = userService.updateUser(dni, userDTO);
-        return new ResponseEntity<>(userdto, HttpStatus.OK);
+        return new ResponseEntity<>(userService.updateUser(dni, userDTO), HttpStatus.OK);
 
    }
    @DeleteMapping("/usuarios/{dni}")
    public ResponseEntity<?> delete(@PathVariable String dni) throws ApiException {
-       UserDTO userDTO = userService.deleteUser(dni);
-       return new ResponseEntity<>(userDTO,HttpStatus.OK);
+       return new ResponseEntity<>(userService.deleteUser(dni),HttpStatus.OK);
 
    }
 

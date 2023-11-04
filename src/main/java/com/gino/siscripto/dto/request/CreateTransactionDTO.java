@@ -1,4 +1,4 @@
-package com.gino.siscripto.dto;
+package com.gino.siscripto.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

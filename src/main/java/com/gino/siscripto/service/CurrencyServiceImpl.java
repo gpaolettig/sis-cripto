@@ -9,6 +9,7 @@ import com.gino.siscripto.model.entity.Currency;
 import com.gino.siscripto.model.entity.Wallet;
 import com.gino.siscripto.repository.ICurrencyDAO;
 import com.gino.siscripto.service.interfaces.ICurrencyService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,15 +21,14 @@ import java.util.UUID;
 public class CurrencyServiceImpl implements ICurrencyService {
     @Autowired
     ICurrencyDAO iCurrencyDAO;
+    @Autowired
+    ModelMapper modelMapper;
     @Override
     public CurrencyDTO createCurrency(CurrencyDTO currencyDTO) throws ApiException {
         //transformar dto a currency
-        Currency currency = new Currency();
-        currency.setTicker(currencyDTO.getTicker());
-        currency.setName(currencyDTO.getName());
-        currency.setValue(currencyDTO.getValue());
+        Currency currency = modelMapper.map(currencyDTO,Currency.class);
         //verificar si ya existe la divisa
-        if (iCurrencyDAO.findById(currencyDTO.getTicker()).isPresent()){
+        if (currencyExist(currency.getTicker())){
             throw new CurrencyAlreadyExist(currencyDTO.getTicker());
         }
         iCurrencyDAO.save(currency);
@@ -62,9 +62,7 @@ public class CurrencyServiceImpl implements ICurrencyService {
     @Override
     public Boolean currencyExist(String ticker) {
         Optional<Currency> currency = iCurrencyDAO.findById(ticker);
-            if(currency.isPresent())
-                return true;
-            return false;
+        return currency.isPresent();
 
     }
     @Override

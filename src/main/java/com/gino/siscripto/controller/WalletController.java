@@ -38,8 +38,7 @@ public class WalletController {
     }
     @DeleteMapping("/wallets/{id}")
     public ResponseEntity<?>deleteWallet(@PathVariable UUID id) throws ApiException{
-        Wallet wallet = iWalletService.deleteWallet(id);
-        return new ResponseEntity<>(wallet,HttpStatus.OK);
+        return new ResponseEntity<>(iWalletService.deleteWallet(id),HttpStatus.OK);
     }
 
 }

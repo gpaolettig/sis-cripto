@@ -1,4 +1,4 @@
-package com.gino.siscripto.dto;
+package com.gino.siscripto.dto.response;
 
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
@@ -17,5 +17,7 @@ public class TransactionSuccesfullyDTO {
     private String type;
     private UUID origin_wallet_id;
     private UUID destination_wallet_id;
-    //podria incluir un campo status: Accepted
+    //private BigDecimal transaction_fee (comision)
+    //private String dni_user_o
+    //private String dni_user_d
 }

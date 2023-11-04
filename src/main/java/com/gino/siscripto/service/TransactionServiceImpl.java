@@ -1,7 +1,7 @@
 package com.gino.siscripto.service;
 
-import com.gino.siscripto.dto.CreateTransactionDTO;
-import com.gino.siscripto.dto.TransactionSuccesfullyDTO;
+import com.gino.siscripto.dto.request.CreateTransactionDTO;
+import com.gino.siscripto.dto.response.TransactionSuccesfullyDTO;
 import com.gino.siscripto.exceptions.ApiException;
 import com.gino.siscripto.exceptions.CurrencyDoesNotExist;
 import com.gino.siscripto.exceptions.NotEnoughFunds;
@@ -15,6 +15,7 @@ import com.gino.siscripto.service.interfaces.IHoldingService;
 import com.gino.siscripto.service.interfaces.ITransactionService;
 import com.gino.siscripto.service.interfaces.IWalletService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +36,8 @@ public class TransactionServiceImpl implements ITransactionService {
     private IWalletService walletService;
     @Autowired
     private IHoldingService holdingService;
-
+    @Value("${company.wallet.id}")
+    private UUID companyWalletId;
     @Transactional
     @Override
     public TransactionSuccesfullyDTO createTransaction(CreateTransactionDTO transactiondto) throws ApiException {
@@ -91,8 +93,9 @@ public class TransactionServiceImpl implements ITransactionService {
 
         }
         if (transaction.getType().equals("Deposito")){
+            BigDecimal amountWithFee =chargeDepositFee(transaction);
             HoldingKey key = new HoldingKey(transaction.getDestination_wallet_id(),transaction.getDestination_currency_ticker());
-            Holding holding = new Holding(key,transaction.getDestination_amount());
+            Holding holding = new Holding(key,amountWithFee);
             if (holdingService.checkHolding(key)) //si ya posee criptos
                 holdingService.updateHolding(holding, key, 1); //actualizo
             else
@@ -154,6 +157,21 @@ public class TransactionServiceImpl implements ITransactionService {
         HoldingKey holdingKey = new HoldingKey(idWallet, ticker);
         Holding requieredHolding = new Holding(holdingKey, amount);
         return holdingService.checkHoldingAmount(requieredHolding);
+    }
+    private BigDecimal chargeDepositFee(Transaction transaction) throws ApiException{
+        //calculamos la cantidad de crito de comision (0.25)
+        BigDecimal feeAmount= transaction.getDestination_amount().multiply(BigDecimal.valueOf(0.25)).divide(BigDecimal.valueOf(100));
+        //Quitamos la comision a la cantidad que el usuario quiere depositar
+        BigDecimal amountWithFee = transaction.getDestination_amount().subtract(feeAmount);
+        BigDecimal priceCurrency = currencyService.getPrice(transaction.getDestination_currency_ticker());
+        //paso de cripto(eth pj)  a ars, equivaldria a una venta
+        HoldingKey companyKey = new HoldingKey(companyWalletId,"ARS");
+        Holding companyHolding = new Holding(companyKey,feeAmount.multiply(priceCurrency));
+        if (holdingService.checkHolding(companyKey))
+            holdingService.updateHolding(companyHolding, companyKey, 1);
+        else //no tiene esa cripto en su wallet
+            holdingService.createHolding(companyHolding);
+        return amountWithFee;
     }
 
 }

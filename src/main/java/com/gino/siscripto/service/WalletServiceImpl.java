@@ -65,6 +65,7 @@ public class WalletServiceImpl implements IWalletService {
         Optional<User> user = iUserDAO.findById(dni_user);
         List<Wallet> wallets = new ArrayList<>();
         if (user.isPresent()) {
+            //trae todas las wallets no las del user eh
             Iterable<Wallet> walletIterable = iWalletDAO.findAll();
             //recorro el iterable y agrego cada elemento a la lista
             walletIterable.forEach(wallets::add);
@@ -83,6 +84,7 @@ public class WalletServiceImpl implements IWalletService {
             wallet.get().setBalance(walletDTO.getBalance());
             wallet.get().setUserDNI(walletDTO.getDni());
             //actualizar en la bd
+            //podria retornar el dto que viene por parametro y no volver a mapear
             return modelMapper.map(iWalletDAO.save(wallet.get()),WalletDTO.class);
         }
         throw new WalletDoesNotExist(id);

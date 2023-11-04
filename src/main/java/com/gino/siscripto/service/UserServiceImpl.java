@@ -47,6 +47,7 @@ public class UserServiceImpl implements IUserService {
         user.setWallets(wallets);
         //llamar un metodo del repositorio para guardarlo
         usuarioDAO.save(user);
+        //podria retornar el dto que viene por parametro y no volver a mapear
         return modelMapper.map(user,UserDTO.class);
     }
     @Transactional(readOnly = true)

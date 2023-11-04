@@ -17,18 +17,15 @@ public class CurrencyController {
 
     @PostMapping("/currencies")
     public ResponseEntity<?> createCurrency(@RequestBody CurrencyDTO currencyDTO) throws ApiException {
-        CurrencyDTO currencyDTOResponse = iCurrencyService.createCurrency(currencyDTO);
-        return new ResponseEntity<>(currencyDTOResponse, HttpStatus.CREATED);
+        return new ResponseEntity<>(iCurrencyService.createCurrency(currencyDTO), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/currencies/{ticker}")
     public ResponseEntity<?> deleteurrency(@PathVariable String ticker) throws ApiException {
-        CurrencyDTO currencyDTOResponse = iCurrencyService.deleteCurrency(ticker);
-        return new ResponseEntity<>(currencyDTOResponse, HttpStatus.OK);
+        return new ResponseEntity<>(iCurrencyService.deleteCurrency(ticker), HttpStatus.OK);
     }
     @PutMapping("/currencies/{ticker}")
     public ResponseEntity<?> updateCurrency(@PathVariable String ticker,@RequestBody CurrencyDTO currencyDTO) throws ApiException {
-        CurrencyDTO currencyDTOResponse = iCurrencyService.updateCurrency(ticker,currencyDTO);
-        return new ResponseEntity<>(currencyDTOResponse, HttpStatus.OK);
+        return new ResponseEntity<>(iCurrencyService.updateCurrency(ticker,currencyDTO), HttpStatus.OK);
     }
 }

@@ -1,7 +1,6 @@
 package com.gino.siscripto.controller;
 
-import com.gino.siscripto.dto.CreateTransactionDTO;
-import com.gino.siscripto.dto.TransactionSuccesfullyDTO;
+import com.gino.siscripto.dto.request.CreateTransactionDTO;
 import com.gino.siscripto.exceptions.ApiException;
 import com.gino.siscripto.service.interfaces.ITransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ public class TransactionController {
     ITransactionService transactionService;
     @PostMapping("/transactions")
     public ResponseEntity<?> createTransaction(@RequestBody CreateTransactionDTO transactiondto) throws ApiException {
-        TransactionSuccesfullyDTO succesfullyDTO = transactionService.createTransaction(transactiondto);
-        return new ResponseEntity<>(succesfullyDTO, HttpStatus.OK);
+        return new ResponseEntity<>(transactionService.createTransaction(transactiondto), HttpStatus.OK);
     }
 }
