@@ -40,4 +40,7 @@ Una vez que hayas configurado la base de datos y guardado los cambios en applica
 
 ### Accede a la Aplicación
 A través de Postman podes probar los diferentes endpoints de la API. 
+Abrí Postman y cargá en tu workspace la colleción que se encuentra en scripts/API REST- Cripto.postman_collection.json
+Por último proba los diferentes endpoints siguiendo las instrucciones en la misma docu.
+Abrí p
 
