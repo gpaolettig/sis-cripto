@@ -2,8 +2,8 @@ package com.gino.siscripto.service;
 
 import com.gino.siscripto.dto.UserDTO;
 import com.gino.siscripto.exceptions.ApiException;
-import com.gino.siscripto.exceptions.UserAlreadyExists;
-import com.gino.siscripto.exceptions.UserDoesNotExists;
+import com.gino.siscripto.exceptions.UserAlreadyExist;
+import com.gino.siscripto.exceptions.UserDoesNotExist;
 import com.gino.siscripto.model.entity.Wallet;
 import com.gino.siscripto.model.entity.User;
 import com.gino.siscripto.repository.IUserDAO;
@@ -28,13 +28,13 @@ public class UserServiceImpl implements IUserService {
 
     @Transactional
     @Override
-    public UserDTO createUser(UserDTO userDTO) throws UserAlreadyExists {
+    public UserDTO createUser(UserDTO userDTO) throws UserAlreadyExist {
         //transformar el userDTO en user
         User user = modelMapper.map(userDTO,User.class);
 
         //Verifico si el usuario existe en la BD
         if(usuarioDAO.findById(userDTO.getDni()).isPresent()){
-            throw new UserAlreadyExists(userDTO.getDni());
+            throw new UserAlreadyExist(userDTO.getDni());
         }
         //Crear billetera (ya que si un usuario es creado se crea su billetera 1..*)
         List<Wallet>wallets= new ArrayList<>();
@@ -52,12 +52,12 @@ public class UserServiceImpl implements IUserService {
     }
     @Transactional(readOnly = true)
     @Override
-    public UserDTO getUser(String dni) throws UserDoesNotExists {
+    public UserDTO getUser(String dni) throws UserDoesNotExist {
         Optional<User> user = usuarioDAO.findById(dni);
         if(user.isPresent()){
             return modelMapper.map(user.get(),UserDTO.class);
         }
-        throw new UserDoesNotExists(dni);
+        throw new UserDoesNotExist(dni);
     }
 
     @Transactional
@@ -85,7 +85,7 @@ public class UserServiceImpl implements IUserService {
             usuarioDAO.save(userExistente);
             return modelMapper.map(userExistente,UserDTO.class);
         }
-        throw new UserDoesNotExists(dni);
+        throw new UserDoesNotExist(dni);
     }
     @Transactional
     @Override
@@ -97,7 +97,7 @@ public class UserServiceImpl implements IUserService {
             usuarioDAO.delete(user.get());
             return modelMapper.map(user.get(),UserDTO.class);
         }
-        throw new UserDoesNotExists(dni);
+        throw new UserDoesNotExist(dni);
     }
 
     @Transactional(readOnly = true)

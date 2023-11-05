@@ -2,11 +2,10 @@ package com.gino.siscripto.service;
 
 import com.gino.siscripto.dto.WalletDTO;
 import com.gino.siscripto.exceptions.ApiException;
-import com.gino.siscripto.exceptions.UserDoesNotExists;
+import com.gino.siscripto.exceptions.UserDoesNotExist;
 import com.gino.siscripto.exceptions.WalletDoesNotExist;
 import com.gino.siscripto.model.entity.User;
 import com.gino.siscripto.model.entity.Wallet;
-import com.gino.siscripto.repository.IUserDAO;
 import com.gino.siscripto.repository.IWalletDAO;
 import com.gino.siscripto.service.interfaces.IUserService;
 import com.gino.siscripto.service.interfaces.IWalletService;
@@ -46,7 +45,7 @@ public class WalletServiceImpl implements IWalletService {
             // Guardar la billetera en la base de datos Y hacer mapeo a dto
             return modelMapper.map(walletDAO.save(wallet), WalletDTO.class);
         } else {
-            throw new UserDoesNotExists(walletDTO.getDni());
+            throw new UserDoesNotExist(walletDTO.getDni());
         }
 
     }
@@ -73,7 +72,7 @@ public class WalletServiceImpl implements IWalletService {
             return wallets.stream().map(wallet -> modelMapper.map(wallet, WalletDTO.class))
                     .collect(Collectors.toList());
         }
-        throw new UserDoesNotExists(dni_user);
+        throw new UserDoesNotExist(dni_user);
     }
 
     @Override
@@ -133,7 +132,7 @@ public class WalletServiceImpl implements IWalletService {
         if(userService.getUserOptional(dni).isPresent()){
             return walletDAO.getAllBalance(dni);
         }
-        throw new UserDoesNotExists(dni);
+        throw new UserDoesNotExist(dni);
     }
 
 
