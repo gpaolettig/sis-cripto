@@ -5,7 +5,7 @@ Se aplicaron patrones de diseño como DAO, DTO, Inyección de dependencias.
 
 ---
 ## Índice
-- [Instalación] (#instalación)
+- [Instalacion](#Instalación)
 
 ## Instalación
 
