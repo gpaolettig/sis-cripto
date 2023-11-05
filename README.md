@@ -24,15 +24,20 @@ En el archivo application.properties, que se encuentra en la carpeta de recursos
 
 #configuracion bd
 spring.datasource.username= tu-nombre-de-usuario
+
 spring.datasource.password= tu-contraseña
+
 spring.datasource.url=jdbc:mysql://localhost/nombre-de-tu-bd?useUnicode=true&characterEncoding=UTF-8
 
 ### Creá la Base de Datos
-Abrí tu cliente de MySQL y crea la base de datos con el nombre que especificaste en la URL anterior. Utilizá el script de creación de base de datos que se proporciona .....
+Abrí tu cliente de MySQL y crea la base de datos con el nombre que especificaste en la URL anterior. Utilizá el script de creación de base de datos que se proporciona en 
+scripts/creacion_bd.sql
+### Realizá una carga de datos de prueba
+Abrí tu cliente de MySQL y abrí el archivo que se encuentra en scripts/datos_prueba_bd.sql seleccioná la base de datos y ejecutá el archivo.
 
 ### Ejecutá la Aplicación
 Una vez que hayas configurado la base de datos y guardado los cambios en application.properties, podes ejecutar la aplicación. Busca la clase principal "SisCriptoApplication" (etiquetada como @SpringBootApplication) y dale al botón run (ejecutar) de tu entorno de desarrollo.
 
 ### Accede a la Aplicación
-A través de postman podes probar los diferentes endpoints de la API. 
+A través de Postman podes probar los diferentes endpoints de la API. 
 
