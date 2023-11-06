@@ -96,6 +96,7 @@ public class TransactionServiceImpl implements ITransactionService {
             BigDecimal amountWithFee =chargeDepositFee(transaction);
             HoldingKey key = new HoldingKey(transaction.getDestination_wallet_id(),transaction.getDestination_currency_ticker());
             Holding holding = new Holding(key,amountWithFee);
+
             if (holdingService.checkHolding(key)) //si ya posee criptos
                 holdingService.updateHolding(holding, key, 1); //actualizo
             else
