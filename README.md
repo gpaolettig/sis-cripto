@@ -6,6 +6,13 @@ Se aplicaron patrones de diseño como DAO, DTO, Inyección de dependencias.
 ---
 ## Índice
 - [Instalacion](#Instalación)
+  -[User](#user)
+    -[Create User](#create-user)
+    -[Get User](#get-user)
+    -[Get All](#get-all)
+    -[Update User](#update-user)
+    -[Delete User](#delete-user)
+- [Endpoints API](#endpoints-api)
 
 ## Instalación
 
@@ -42,5 +49,118 @@ Una vez que hayas configurado la base de datos y guardado los cambios en applica
 A través de Postman podes probar los diferentes endpoints de la API. 
 Abrí Postman y cargá en tu workspace la colleción que se encuentra en scripts/API REST- Cripto.postman_collection.json
 Por último proba los diferentes endpoints siguiendo las instrucciones en la misma docu.
+
+## Endpoints API
+### User
+Operaciones Create, Read, Update, Delete de un usuario.
+#### Create User
+```http
+  POST localhost:8080/api/v1/usuarios
+```
+| Parámetro | Tipo     | Descripción              | Ejemplo|
+| :-------- | :------- | :------------------------- | :------------------------- |
+| dni| `String` | **Requerido** por body.  |44913425
+| name| `String` | **Requerido** por body.  |Juan
+| surname| `String` | **Requerido** por body.  |Pérez
+| gender| `String` | **Requerido** por body.  | Masculino
+| email| `String` | **Requerido** por body.  | juan@gmail.com
+| tel| `String` |                            | 2664123456
+- URL: localhost:8080/api/v1/usuarios
+- Método: POST
+- Respuesta:  
+	201 - CREATED: dni,name,surname,gender,email,tel
+  
+  409 - CONFLICT: El usuario a dar de alta ya existe. + Excepción personalizada (UserAlreadyExist)
+> [!NOTE]
+> Al crear un usuario, se creará una billetera asociada a él.
+
+Ejemplo en POSTMAN
+
+<img width="470" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/a0799e70-080e-4f47-a715-86fc9aad7d7f">
+
+#### Get User
+```http
+  GET localhost:8080/api/v1/usuarios/{dni}
+```
+| Parámetro | Tipo     | Descripción              | Ejemplo|
+| :-------- | :------- | :------------------------- | :------------------------- |
+| dni| `String` | **Requerido** por url.  |44913425
+
+- URL: localhost:8080/api/v1/usuarios/{id}
+- Método: GET
+- Respuesta:  
+	200 - OK: dni,name,surname,gender,email,tel (UserDTO)
+  404 - NOT FOUND: El usuario a buscar no existe + Excepción personalizada (UserDoesNotExist)
+
+Ejemplo en POSTMAN
+
+<img width="511" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/76f1f490-4dac-4738-b2bd-80af640a6ed2">
+
+#### Get All
+```http
+  GET localhost:8080/api/v1/usuarios
+```
+| Parámetro | Tipo     | Descripción              | Ejemplo|
+| :-------- | :------- | :------------------------- | :------------------------- |
+| |  | No se requieren parametros.  |
+
+- URL: localhost:8080/api/v1/usuarios
+- Método: GET
+- Respuesta: 
+	200 - OK: Array JSON con objetos UserDTO. De no existir usuarios, se retorna un array vacío. 
+
+Ejemplo en POSTMAN
+
+<img width="515" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/e8eca345-f86f-4cc8-bc63-46302972f17d">
+
+#### Update User
+```http
+  PUT localhost:8080/api/v1/usuarios/{dni}
+```
+| Parámetro | Tipo     | Descripción              | Ejemplo|
+| :-------- | :------- | :------------------------- | :------------------------- |
+| dni| `String` | **Requerido** por url.  |44913425
+| name| `String` | **Requerido** por body.  |Juan
+| surname| `String` | **Requerido** por body.  |Pérez
+| gender| `String` | **Requerido** por body.  | Masculino
+| email| `String` | **Requerido** por body.  | juan@gmail.com
+| tel| `String` |  **Requerido** por body.   | 2664123456
+- URL: localhost:8080/api/v1/usuarios{dni}
+- Método: PUT
+- Respuesta:  
+	200 - OK: dni,name,surname,gender,email,tel (UserDTO)
+  
+  404 - NOT FOUND: El usuario a actualizar no existe. + Excepción personalizada (UserDoesNotExist)
+
+Ejemplo en POSTMAN 
+
+<img width="514" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/8b99a6e1-99e0-4900-9456-34fa78d6de25">
+
+#### Delete User
+```http
+  DELETE localhost:8080/api/v1/usuarios/{dni}
+```
+| Parámetro | Tipo     | Descripción              | Ejemplo|
+| :-------- | :------- | :------------------------- | :------------------------- |
+|dni  | `String`| **Requerido** por url.  | 44913425
+
+- URL: localhost:8080/api/v1/usuarios/{dni}
+- Método: DELETE
+- Respuesta:
+
+	200 - OK: dni,name,surname,gender,email,tel (UserDTO)
+
+  404 - NOT FOUND: El usuario a actualizar no existe. + Excepción personalizada (UserDoesNotExist)
+  
+
+Ejemplo en POSTMAN
+
+<img width="511" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/8d0c67a1-9513-495b-be1a-c53a487a925a">
+
+### Wallet
+
+
+
+
 
 
