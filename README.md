@@ -8,11 +8,20 @@ Se aplicaron patrones de diseño como DAO, DTO, Inyección de dependencias.
 - [Instalacion](#Instalación)
 - [Endpoints API](#endpoints-api)
 	- [User](#user)
-	- [Create User](#create-user)
-	- [Get User](#get-user)
-	- [Get All](#get-all)
-	- [Update User](#update-user)
-   	- [Delete User](#delete-user)
+		- [Create User](#create-user)
+		- [Get User](#get-user)
+		- [Get All](#get-all)
+		- [Update User](#update-user)
+   		- [Delete User](#delete-user)
+	- [Wallet](#wallet)
+   		- [Create Wallet](#create-wallet)
+		- [Get Wallet](#get-wallet)
+		- [Get All](#get-user-wallet)
+		- [Update User](#update-wallet)
+   		- [Delete User](#delete-wallet)
+       		- [Get Balance](#get-balance)
+         	- [Delete User](#get-all-balance)
+       
 
 ## Instalación
 
@@ -67,8 +76,9 @@ Operaciones Create, Read, Update, Delete de un usuario.
 | tel| `String` |                            | 2664123456
 - URL: localhost:8080/api/v1/usuarios
 - Método: POST
-- Respuesta:  
-	201 - CREATED: dni,name,surname,gender,email,tel
+- Respuesta:
+  
+  201 - CREATED: dni,name,surname,gender,email,tel
   
   409 - CONFLICT: El usuario a dar de alta ya existe. + Excepción personalizada (UserAlreadyExist)
 > [!NOTE]
@@ -88,8 +98,10 @@ Ejemplo en POSTMAN
 
 - URL: localhost:8080/api/v1/usuarios/{id}
 - Método: GET
-- Respuesta:  
-	200 - OK: dni,name,surname,gender,email,tel (UserDTO)
+- Respuesta:
+  
+  200 - OK: dni,name,surname,gender,email,tel (UserDTO)
+  
   404 - NOT FOUND: El usuario a buscar no existe + Excepción personalizada (UserDoesNotExist)
 
 Ejemplo en POSTMAN
@@ -106,8 +118,9 @@ Ejemplo en POSTMAN
 
 - URL: localhost:8080/api/v1/usuarios
 - Método: GET
-- Respuesta: 
-	200 - OK: Array JSON con objetos UserDTO. De no existir usuarios, se retorna un array vacío. 
+- Respuesta:
+  
+  200 - OK: Array JSON con objetos UserDTO. De no existir usuarios, se retorna un array vacío. 
 
 Ejemplo en POSTMAN
 
@@ -127,8 +140,9 @@ Ejemplo en POSTMAN
 | tel| `String` |  **Requerido** por body.   | 2664123456
 - URL: localhost:8080/api/v1/usuarios{dni}
 - Método: PUT
-- Respuesta:  
-	200 - OK: dni,name,surname,gender,email,tel (UserDTO)
+- Respuesta:
+  
+  200 - OK: dni,name,surname,gender,email,tel (UserDTO)
   
   404 - NOT FOUND: El usuario a actualizar no existe. + Excepción personalizada (UserDoesNotExist)
 
@@ -147,9 +161,9 @@ Ejemplo en POSTMAN
 - URL: localhost:8080/api/v1/usuarios/{dni}
 - Método: DELETE
 - Respuesta:
-
-	200 - OK: dni,name,surname,gender,email,tel (UserDTO)
-
+  
+  200 - OK: dni,name,surname,gender,email,tel (UserDTO)
+  
   404 - NOT FOUND: El usuario a actualizar no existe. + Excepción personalizada (UserDoesNotExist)
   
 
@@ -159,8 +173,159 @@ Ejemplo en POSTMAN
 
 ### Wallet
 
+#### Create Wallet
+```http
+  POST localhost:8080/api/v1/wallets
+```
+| Parámetro | Tipo     | Descripción              | Ejemplo|
+| :-------- | :------- | :------------------------- | :------------------------- |
+| dni| `String` | **Requerido** por body.  |44913425
+| balance| `BigDecimal` | **Requerido** por body.  |6500.00
+
+- URL: localhost:8080/api/v1/wallets
+- Método: POST
+- Respuesta:
+
+  201 - CREATED: id, dni, balance. (WalletDTO)
+  
+  404 - NOT FOUND: El usuario asociado a la billetera no existe + Excepción personalizada (UserDoesNotExist)
+> [!NOTE]
+> Al crear una billetera, el id de la misma se generará automaticamente. El tipo es UUID. 
+
+Ejemplo en POSTMAN
+
+<img width="517" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/81c84575-428c-40c9-882f-a3b9ebb3280e">
+
+#### Get Wallet
+```http
+  GET localhost:8080/api/v1/wallets/{id}
+```
+| Parámetro | Tipo     | Descripción              | Ejemplo|
+| :-------- | :------- | :------------------------- | :------------------------- |
+| id| `UUID` | **Requerido** por url.  |c0a80067-8ba6-169e-818b-a6d684c70003
 
 
+- URL: localhost:8080/api/v1/wallets/{id}
+- Método: GET
+- Respuesta:
+
+  200 - OK: id, dni, balance. (WalletDTO)
+  
+  404 - NOT FOUND: La billetera a buscar no existe + Excepción personalizada (WalletDoesNotExist)
 
 
+Ejemplo en POSTMAN
+
+<img width="518" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/84acac41-4552-4d11-84f4-3c8f3dcf5bf7">
+
+#### Get User Wallets
+```http
+  GET localhost:8080/api/v1/wallets/user/{dni}
+```
+| Parámetro | Tipo     | Descripción              | Ejemplo|
+| :-------- | :------- | :------------------------- | :------------------------- |
+| dni| `String` | **Requerido** por url.  |44913425
+
+
+- URL: localhost:8080/api/v1/wallets/user/{dni}
+- Método: GET
+- Respuesta:
+
+  200 - OK: Array JSON con objetos WalletDTO o vacío.
+  
+  404 - NOT FOUND: El usuario asociado a la billetera no existe + Excepción personalizada (UserDoesNotExist)
+
+
+Ejemplo en POSTMAN
+
+<img width="511" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/8b0efb8e-cb21-46f4-8976-0e233dfc2fdb">
+
+#### Update Wallet
+```http
+  PUT localhost:8080/api/v1/wallets/{id}
+```
+| Parámetro | Tipo     | Descripción              | Ejemplo|
+| :-------- | :------- | :------------------------- | :------------------------- |
+| id| `UUID` | **Requerido** por url.  |c0a80067-8ba6-169e-818b-a6d684c70003
+| dni| `String` | **Requerido** por body.  |44913425
+| balance| `BigDecimal` | **Requerido** por body.  |4000.00
+
+
+- URL: localhost:8080/api/v1/wallets/{id}
+- Método: PUT
+- Respuesta:
+
+  200 - OK: id, dni, balance. (WalletDTO)
+  
+  404 - NOT FOUND: La billetera a actualizar no existe + Excepción personalizada (WalletDoesNotExist)
+
+
+Ejemplo en POSTMAN
+
+<img width="509" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/b09524ce-6aad-4262-addb-dd306f1a1045">
+
+#### Delete Wallet
+```http
+  DELETE localhost:8080/api/v1/wallets/{id}
+```
+| Parámetro | Tipo     | Descripción              | Ejemplo|
+| :-------- | :------- | :------------------------- | :------------------------- |
+| id| `UUID` | **Requerido** por url.  |c0a80067-8ba6-169e-818b-a6d684c70003
+
+
+- URL: localhost:8080/api/v1/wallets/{id}
+- Método: DELETE
+- Respuesta:
+
+  200 - OK: id, dni, balance. (WalletDTO)
+  
+  404 - NOT FOUND: La billetera a eliminar no existe + Excepción personalizada (WalletDoesNotExist)
+
+
+Ejemplo en POSTMAN
+
+<img width="512" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/9e77947b-0fd4-4857-9816-09c67750419c">
+
+#### Get Balance
+```http
+  GET localhost:8080/api/v1/wallets/balance/{id}
+```
+| Parámetro | Tipo     | Descripción              | Ejemplo|
+| :-------- | :------- | :------------------------- | :------------------------- |
+| id| `UUID` | **Requerido** por url.  |c0a80067-8ba6-169e-818b-a6d53ea40001
+
+
+- URL: localhost:8080/api/v1/wallets/balance/{id}
+- Método: GET
+- Respuesta:
+
+  200 - OK: balance. 
+  
+  404 - NOT FOUND: La billetera a consultar su saldo no existe + Excepción personalizada (WalletDoesNotExist)
+
+
+Ejemplo en POSTMAN
+
+<img width="512" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/592bd9eb-f743-4347-a23d-44aad84b8e68">
+
+#### Get All Balance
+```http
+  GET localhost:8080/api/v1/wallets/user/balance/{dni}
+```
+| Parámetro | Tipo     | Descripción              | Ejemplo|
+| :-------- | :------- | :------------------------- | :------------------------- |
+| dni| `String` | **Requerido** por url.  |44913425
+
+- URL: localhost:8080/api/v1/wallets/user/balance/{dni}
+- Método: GET
+- Respuesta:
+
+  200 - OK: balance. 
+  
+  404 - NOT FOUND: El usuario asociado a la billetera no existe + Excepción personalizada (UserDoesNotExist)
+
+
+Ejemplo en POSTMAN
+
+<img width="518" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/b4da49c3-72d8-414c-b9f9-a3247010b587">
 
