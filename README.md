@@ -20,7 +20,7 @@ Se aplicaron patrones de diseño como DAO, DTO, Inyección de dependencias.
 		- [Update User](#update-wallet)
    		- [Delete User](#delete-wallet)
        		- [Get Balance](#get-balance)
-         	- [Delete User](#get-all-balance)
+           	- [Delete User](#get-all-balance)
        
 
 ## Instalación
