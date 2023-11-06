@@ -6,13 +6,13 @@ Se aplicaron patrones de diseño como DAO, DTO, Inyección de dependencias.
 ---
 ## Índice
 - [Instalacion](#Instalación)
-  -[User](#user)
-    -[Create User](#create-user)
-    -[Get User](#get-user)
-    -[Get All](#get-all)
-    -[Update User](#update-user)
-    -[Delete User](#delete-user)
 - [Endpoints API](#endpoints-api)
+	- [User](#user)
+	- [Create User](#create-user)
+	- [Get User](#get-user)
+	- [Get All](#get-all)
+	- [Update User](#update-user)
+   	- [Delete User](#delete-user)
 
 ## Instalación
 
