@@ -300,8 +300,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "/wallets/user/balance/44913425",
+							"raw": "localhost:8080/api/v1/wallets/user/balance/44913425",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
 							"path": [
+								"api",
+								"v1",
 								"wallets",
 								"user",
 								"balance",
