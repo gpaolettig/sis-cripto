@@ -28,7 +28,7 @@ Se aplicaron patrones de diseño como DAO, DTO, Inyección de dependencias.
   	- [Transaction](#transaction)
 		- [Create Transaction](#create-transaction)
 			- [Intercambio](#intercambio)
-			- [Deposito](#deposito)
+			- [Deposito](#depósito)
        
 
 ## Instalación
@@ -423,7 +423,7 @@ Operaciones: Depósito de criptodivisa e intercambio de criptodivisas.
 ```http
   POST localhost:8080/api/v1/transactions
 ```
-##### 1. Intercambio
+##### Intercambio
    
 | Parámetro | Tipo     | Descripción              | Ejemplo|
 | :-------- | :------- | :------------------------- | :------------------------- |
@@ -468,7 +468,7 @@ Veamos las tenencias de ambas billeteras luego del intercambio.
 
 <img width="331" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/b338d065-aec0-403e-8f17-5d8c3b4bdf62">
 
-##### 2. Depósito.
+##### Depósito.
 
  | Parámetro | Tipo     | Descripción              | Ejemplo|
 | :-------- | :------- | :------------------------- | :------------------------- |
