@@ -19,8 +19,16 @@ Se aplicaron patrones de diseño como DAO, DTO, Inyección de dependencias.
 		- [Get All](#get-user-wallet)
 		- [Update User](#update-wallet)
    		- [Delete User](#delete-wallet)
-       		- [Get Balance](#get-balance)
-           	- [Delete User](#get-all-balance)
+		- [Get Balance](#get-balance)
+		- [Get All balance](#get-all-balance)
+	- [Currency](#currency)
+		- [Create Currency](#create-currency)
+		- [Update Currency](#update-currency)
+		- [Delete Currency](#delete-currency)
+  	- [Transaction](#transaction)
+		- [Create Transaction](#create-transaction)
+			- [Intercambio](#intercambio)
+			- [Deposito](#deposito)
        
 
 ## Instalación
@@ -172,6 +180,7 @@ Ejemplo en POSTMAN
 <img width="511" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/8d0c67a1-9513-495b-be1a-c53a487a925a">
 
 ### Wallet
+Operaciones Create, Read, Update, Delete, GetBalance, GetAllBalance de una billetera.
 
 #### Create Wallet
 ```http
@@ -328,4 +337,174 @@ Ejemplo en POSTMAN
 Ejemplo en POSTMAN
 
 <img width="518" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/b4da49c3-72d8-414c-b9f9-a3247010b587">
+
+### Currency
+Operaciones Create, Update y Delete de una criptodivisa.
+
+#### Create Currency
+```http
+  POST localhost:8080/api/v1/currencies
+```
+| Parámetro | Tipo     | Descripción              | Ejemplo|
+| :-------- | :------- | :------------------------- | :------------------------- |
+| ticker| `String` | **Requerido** por body.  |BTC
+| name| `String` | **Requerido** por body.  |Bitcoin
+| value| `BigDecimal` | **Requerido** por body.  |100.00
+
+- URL: localhost:8080/api/v1/currencies
+- Método: POST
+- Respuesta:
+
+  201 - CREATED: ticker, name, value. (CurrencyDTO)
+  
+  409 - CONFLICT: La criptodivisa ya existe + Excepcion personalizada (CurrencyAlreadyExist)
+  
+> [!NOTE]
+> La divisa ARS está presente en la base de datos con valor igual a 1, el valor de todas las criptodivisas es en ARS
+
+Ejemplo en POSTMAN
+
+<img width="509" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/fa1fe6cd-b7b0-44b0-9fbc-6febc6072e0b">
+
+#### Update Currency
+```http
+  PUT localhost:8080/api/v1/currencies/{ticker}
+```
+| Parámetro | Tipo     | Descripción              | Ejemplo|
+| :-------- | :------- | :------------------------- | :------------------------- |
+| ticker| `String` | **Requerido** por url.  |BTC
+| ticker| `String` | **Requerido** por body.  |BTC2
+| name| `String` | **Requerido** por body.  |Bitcoin2
+| value| `BigDecimal` | **Requerido** por body.  |200.00
+
+
+
+- URL: localhost:8080/api/v1/currencies/{ticker}
+- Método: PUT
+- Respuesta:
+
+  200 - OK: ticker, name, value. (CurrencyDTO)
+  
+  404 - NOT FOUND: La criptodivisa a actualizar no existe + Excepcion personalizada (CurrencyDoesNotExist)
+
+
+Ejemplo en POSTMAN
+
+<img width="517" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/059af39f-6cee-4cd7-b813-77f496188ce4">
+
+#### Delete Currency
+```http
+  DELETE localhost:8080/api/v1/currencies/{ticker}
+```
+| Parámetro | Tipo     | Descripción              | Ejemplo|
+| :-------- | :------- | :------------------------- | :------------------------- |
+| ticker| `String` | **Requerido** por url.  |BTC
+
+
+
+
+- URL: localhost:8080/api/v1/currencies/{ticker}
+- Método: DELETE
+- Respuesta:
+
+  200 - OK: ticker, name, value. (CurrencyDTO)
+  
+  404 - NOT FOUND: La criptodivisa a eliminar no existe + Excepcion personalizada (CurrencyDoesNotExist)
+
+
+Ejemplo en POSTMAN
+
+<img width="509" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/6584f784-cb41-4fc0-acab-ee5afbcdbd3c">
+
+### Transaction
+Operaciones: Depósito de criptodivisa e intercambio de criptodivisas.
+
+#### Create Transaction
+```http
+  POST localhost:8080/api/v1/transactions
+```
+1. Intercambio
+   
+| Parámetro | Tipo     | Descripción              | Ejemplo|
+| :-------- | :------- | :------------------------- | :------------------------- |
+| type| `String` | **Requerido** por body.  |Intercambio
+| origin_currency_ticker| `String` | **Requerido** por body.  |BTC
+| destination_currency_ticker| `String` | **Requerido** por body.  |ETH
+| origin_wallet_id| `UUID` | **Requerido** por body.  | c0a80067-8ba6-169e-818b-a6a6b11e0000
+| destination_wallet_id| `UUID` | **Requerido** por body.  | c0a80067-8ba6-169e-818b-a6d53ea40001
+| origin_amount | `BigDecimal` | **Requerido** por body. | 1
+
+- URL: localhost:8080/api/v1/transactions
+- Método: POST
+- Respuesta:
+  
+  200 - OK: idtransaction, date_transaction, type, origen_wallet_id, destination_wallet_id (TransactionSuccesfullyDTO).
+  varias excepciones personalizadas:
+	- CurrencyDoesNotExist: Una criptodivisa a intercambiar/depositar no existe.
+	- WalletDoesNotExist: Una billetera no existe.
+	- HoldingDoesNotExist: Una billetera no posee tenencias de cripto.
+	- NotEnoughFunds: Una billetera no posee los sufiencientes fondos para realizar un intercambio.
+Ejemplo en Postman
+
+Billetera de origen:
+
+<img width="311" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/1da04565-9adf-47db-a9db-33ae448ec108">
+
+Billetera de destino:
+
+<img width="281" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/d5cebe0a-4247-40b9-9266-4a89a8566547">
+
+Tenencias:
+
+<img width="336" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/3c0e56dd-b0c0-40d5-aefd-8889e787965a">
+
+Intercambio:
+
+Se intercambia 1 BTC por el equivalente en ETH, en este caso, 5 ETH.
+
+<img width="511" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/f997ae13-a62b-4a7e-b9c9-444d588d70a5">
+
+Veamos las tenencias de ambas billeteras luego del intercambio.
+
+<img width="331" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/b338d065-aec0-403e-8f17-5d8c3b4bdf62">
+
+
+2. Depósito.
+
+ | Parámetro | Tipo     | Descripción              | Ejemplo|
+| :-------- | :------- | :------------------------- | :------------------------- |
+| type| `String` | **Requerido** por body.  |Deposito
+| destination_currency_ticker| `String` | **Requerido** por body.  |BTC
+| destination_wallet_id| `UUID` | **Requerido** por body.  | c0a80067-8ba6-169e-818b-a6f3ed790004
+| destination_amount | `BigDecimal` | **Requerido** por body. | 5
+
+- URL: localhost:8080/api/v1/transactions
+- Método: POST
+- Respuesta:
+
+  200 - OK: idtransaction, date_transaction, type, origen_wallet_id, destination_wallet_id (TransactionSuccesfullyDTO).
+
+  varias excepciones personalizadas:
+	- CurrencyDoesNotExist: Una criptodivisa a intercambiar/depositar no existe.
+	- WalletDoesNotExist: Una billetera no existe.
+	- HoldingDoesNotExist: Una billetera no posee tenencias de cripto.
+	- NotEnoughFunds: Una billetera no posee los sufiencientes fondos para realizar un intercambio.
+
+ La transacción depósito tiene una comision del 0.25% de la cantidad a depositar.
+ 
+ Billetera destino:
+   
+<img width="275" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/3c24961b-c5ba-464d-8934-cd7dbf0ebed4">
+
+Depósito
+
+<img width="508" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/5054e044-ef32-4f00-848e-b4d39a5752da">
+
+Billetera destino luego del depósito: 
+
+<img width="281" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/e0ceb0d1-ef60-4873-a95f-aa496aa9c877">
+
+El 0.25% de la cantidad depositada va a la cuenta de la empresa. (Ya tiene varias transacciones cobradas, es el 0.25% de 1 BTC multiplicado por el valor de BTC (100 ARS) )
+
+<img width="441" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/a71c5f3b-840e-4c5d-8672-34e18b31caa4">
 
