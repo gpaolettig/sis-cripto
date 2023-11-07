@@ -58,6 +58,8 @@ Abrí tu cliente de MySQL y crea la base de datos con el nombre que especificast
 scripts/creacion_bd.sql
 ### Realizá una carga de datos de prueba
 Abrí tu cliente de MySQL y abrí el archivo que se encuentra en scripts/datos_prueba_bd.sql seleccioná la base de datos y ejecutá el archivo.
+> [!IMPORTANT]
+> La carga de datos de prueba contiene algunas criptodivisas y la wallet de la empresa, por lo tanto si no se cargan estos datos, deberás cargar a mano las criptodivisas y no podrás realizar depósitos por no existir la wallet de la empresa que cobra comisión.
 
 ### Ejecutá la Aplicación
 Una vez que hayas configurado la base de datos y guardado los cambios en application.properties, podes ejecutar la aplicación. Busca la clase principal "SisCriptoApplication" (etiquetada como @SpringBootApplication) y dale al botón run (ejecutar) de tu entorno de desarrollo.
@@ -503,7 +505,9 @@ Billetera destino luego del depósito:
 
 <img width="281" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/e0ceb0d1-ef60-4873-a95f-aa496aa9c877">
 
-El 0.25% de la cantidad depositada va a la cuenta de la empresa. (Ya tiene varias transacciones cobradas, es el 0.25% de 1 BTC multiplicado por el valor de BTC (100 ARS) )
+> [!NOTE]
+> El 0.25% de la cantidad depositada va a la cuenta de la empresa. (Ya tiene varias transacciones cobradas, es el 0.25% de 1 BTC multiplicado por el valor de BTC (100 ARS))
+
 
 <img width="441" alt="image" src="https://github.com/gipage/sis-cripto/assets/83784311/a71c5f3b-840e-4c5d-8672-34e18b31caa4">
 
