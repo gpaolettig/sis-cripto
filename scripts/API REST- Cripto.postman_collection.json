@@ -37,12 +37,12 @@
 								"usuarios"
 							]
 						},
-						"description": "Método HTTP: **POST**\n\nParámetros: (vía Body)\n\n- **dni:** (requerido) DNI del usuario, String. _Ejemplo: 44913425_.\n- **name:** (requerido) Nombre del usuario, String. _Ejemplo: Juan._\n- **surname:** (requerido) Apellido del usuario, String. _Ejemplo: Pérez._\n- **gender:** (requerido) Sexo del usuario. String. _Ejemplo: Masculino._\n- **email:** (requerido) Email del usuario. String. _Ejemplo:_ [<i>juan@gmail.com</i>](https://mailto:juan@gmail.com)\n- **tel:** Teléfono del usuario. String. _Ejemplo: 2664123456._\n    \n\n> Al crear un usuario, se creará una billetera asociada a él. \n  \n\nRespuesta:\n\nLa respuesta, de ser exitosa, consta de un JSON con los parámetros:\n\n- dni\n- name\n- surname\n- gender\n- email\n- tel\n    \n\n(**201**) o una excepcion personalizada cuando el usuario a crear ya existe (**409**).\n\n- **201:** Se ha creado un nuevo recurso (usuario).\n- **409:** Conflicto, el usuario a dar de alta ya existe. + Excepción personalizada (UserAlreadyExist)"
+						"description": "Método HTTP: **POST**\n\nParámetros: UserDTO (vía Body)\n\n- **dni:** (requerido) DNI del usuario, String. _Ejemplo: 44913425_.\n- **name:** (requerido) Nombre del usuario, String. _Ejemplo: Juan._\n- **surname:** (requerido) Apellido del usuario, String. _Ejemplo: Pérez._\n- **gender:** (requerido) Sexo del usuario. String. _Ejemplo: Masculino._\n- **email:** (requerido) Email del usuario. String. _Ejemplo:_ [<i>juan@gmail.com</i>](https://mailto:juan@gmail.com)\n- **tel:** Teléfono del usuario. String. _Ejemplo: 2664123456._\n    \n\n> Al crear un usuario, se creará una billetera asociada a él. \n  \n\nRespuesta: UserDTO.\n\nLa respuesta, de ser exitosa, consta de un JSON con los parámetros:\n\n- dni\n- name\n- surname\n- gender\n- email\n- tel\n    \n\n(**201 - CREATED**) o una excepcion personalizada (UserAlreadyExist) cuando el usuario a crear ya existe (**409 - CONFLICT**)."
 					},
 					"response": []
 				},
 				{
-					"name": "Read User",
+					"name": "Get User",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -59,12 +59,12 @@
 								"44913425"
 							]
 						},
-						"description": "Método HTTP: **GET**\n\nParámetros:\n\n- **dni:** (requerido) DNI del usuario. (vía URL) _Ejemplo: 44913425._\n    \n\nRespuesta:\n\nLa respuesta, de ser exitosa, consta de un JSON con los parámetros:\n\n- dni\n- name\n- surname\n- gender\n- email\n- tel\n    \n\n(**200 - OK**) o una excepcion personalizada cuando el usuario a buscar no exista (**404 - NOT FOUND**).\n\n- **200:** La solicitud ha tenido éxito. (Se encontró el usuario)\n- **404:** Recurso no encontrado, el usuario a buscar no existe. + Excepción personalizada (UserDoesNotExist)"
+						"description": "Método HTTP: **GET**\n\nParámetros:\n\n- **dni:** (requerido) DNI del usuario. (vía URL) _Ejemplo: 44913425._\n    \n\nRespuesta: UserDTO.\n\nLa respuesta, de ser exitosa, consta de un JSON con los parámetros:\n\n- dni\n- name\n- surname\n- gender\n- email\n- tel\n    \n\n(**200 - OK**) o una excepcion personalizada (UserDoesNotExist) cuando el usuario a buscar no exista (**404 - NOT FOUND**)."
 					},
 					"response": []
 				},
 				{
-					"name": "Read Users",
+					"name": "Get All",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -80,7 +80,7 @@
 								"usuarios"
 							]
 						},
-						"description": "Método HTTP: **GET**\n\nRespuesta:\n\nLa respuesta, de ser exitosa, consta de un array JSON con objetos usuario.\n\nDe no existir usuarios se retorna un array vacío. Ambos con código 200."
+						"description": "Método HTTP: **GET**\n\nRespuesta: List\n\nLa respuesta, de ser exitosa, consta de un array JSON con objetos UserDTO.\n\nDe no existir usuarios se retorna un array vacío. Ambos con código 200."
 					},
 					"response": []
 				},
@@ -99,7 +99,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/v1/usuarios/43810354",
+							"raw": "localhost:8080/api/v1/usuarios/44913425",
 							"host": [
 								"localhost"
 							],
@@ -108,10 +108,10 @@
 								"api",
 								"v1",
 								"usuarios",
-								"43810354"
+								"44913425"
 							]
 						},
-						"description": "Método HTTP: **PUT**\n\nParámetros:\n\n- **dni:** (requerido) DNI del usuario a buscar (vía URL).\n    \n\nDTO User: Datos a actualizar del usuario. (vía Body)\n\n- **dni:** (requerido) DNI del usuario, String. _Ejemplo: 44913425_.\n- **name:** (requerido) Nombre del usuario, String. _Ejemplo: Juan._\n- **surname:** (requerido) Apellido del usuario, String. _Ejemplo: Pérez._\n- **gender:** (requerido) Sexo del usuario. String. _Ejemplo: Masculino._\n- **email:** (requerido) Email del usuario. String. _Ejemplo:_ [<i>juan@gmail.com</i>](https://mailto:juan@gmail.com)\n- **tel:** Teléfono del usuario. String. _Ejemplo: 2664123456._\n    \n\nRespuesta:\n\nLa respuesta, de ser exitosa, consta de un JSON con los parámetros:\n\n- dni\n- name\n- surname\n- gender\n- email\n- tel\n    \n\n(**200 - OK** ) o una excepcion personalizada (UserDoesNotExist) cuando el usuario a actualizar no existe (**404 - NOT FOUND**)."
+						"description": "Método HTTP: **PUT**\n\nParámetros:\n\n- **dni:** (requerido) DNI del usuario a buscar (vía URL).\n    \n\nDTO User: Datos a actualizar del usuario. (vía Body)\n\n- **dni:** (requerido) DNI del usuario, String. _Ejemplo: 44913425_.\n- **name:** (requerido) Nombre del usuario, String. _Ejemplo: Juan._\n- **surname:** (requerido) Apellido del usuario, String. _Ejemplo: Pérez._\n- **gender:** (requerido) Sexo del usuario. String. _Ejemplo: Masculino._\n- **email:** (requerido) Email del usuario. String. _Ejemplo:_ [<i>juan@gmail.com</i>](https://mailto:juan@gmail.com)\n- **tel:** Teléfono del usuario. String. _Ejemplo: 2664123456._\n    \n\nRespuesta: UserDTO\n\nLa respuesta, de ser exitosa, consta de un JSON con los parámetros:\n\n- dni\n- name\n- surname\n- gender\n- email\n- tel\n    \n\n(**200 - OK** ) o una excepcion personalizada (UserDoesNotExist) cuando el usuario a actualizar no existe (**404 - NOT FOUND**)."
 					},
 					"response": []
 				},
@@ -169,12 +169,12 @@
 								"wallets"
 							]
 						},
-						"description": "Método HTTP: **POST**\n\nParámetros: (vía Body)\n\n- **dni:** (requerido) DNI del usuario asociado a la billetera, String. _Ejemplo: 44913425_.\n- **balance** (requerido) Saldo de la billetera, BigDecimal. _Ejemplo: 6500.00_\n    \n\n> Al crear una billetera, el id de la misma se generará automaticamente.  \nEl tipo del id es UUID. \n  \n\nRespuesta:\n\nLa respuesta, de ser exitosa, consta de un JSON con los parámetros:\n\n- **id:** identificador de la billetera.\n- **dni:** DNI del usuario asociado a la billetera.\n- **balance:** Saldo de la billetera.\n    \n\n(**201 - CREATED**) o una excepcion personalizada (UserDoesNotExist) cuando el usuario asociado a la billetera no existe (**404 - Not Found**)."
+						"description": "Método HTTP: **POST**\n\nParámetros: WalletDTO (vía Body)\n\n- **dni:** (requerido) DNI del usuario asociado a la billetera, String. _Ejemplo: 44913425_.\n- **balance** (requerido) Saldo de la billetera, BigDecimal. _Ejemplo: 6500.00_\n    \n\n> Al crear una billetera, el id de la misma se generará automaticamente.  \nEl tipo del id es UUID. \n  \n\nRespuesta: WalletDTO.\n\nLa respuesta, de ser exitosa, consta de un JSON con los parámetros:\n\n- **id:** identificador de la billetera.\n- **dni:** DNI del usuario asociado a la billetera.\n- **balance:** Saldo de la billetera.\n    \n\n(**201 - CREATED**) o una excepcion personalizada (UserDoesNotExist) cuando el usuario asociado a la billetera no existe (**404 - Not Found**)."
 					},
 					"response": []
 				},
 				{
-					"name": "Read Wallet",
+					"name": "Get Wallet",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -191,12 +191,12 @@
 								"42b91c2b-f4eb-47a6-9c45-a1230162da9d"
 							]
 						},
-						"description": "Método HTTP: **GET**\n\nParámetros:\n\n- **id:** (requerido) Identificador de la billetera. UUID. _Ejemplo: 42b91c2b-f4eb-47a6-9c45-a1230162da9d_\n    \n\nRespuesta:\n\nLa respuesta, de ser exitosa, retorna un JSON con los siguientes parámetros:\n\n- **id:** identificador de la billetera.\n- **dni:** DNI del usuario asociado a la billetera.\n- **balance:** Saldo de la billetera.\n    \n\n(**200 - OK**) o una excepcion personalizada (**404 - Not Found**) cuando la billetera a buscar no existe. (WalletDoesNotExist)"
+						"description": "Método HTTP: **GET**\n\nParámetros:\n\n- **id:** (requerido) Identificador de la billetera. UUID. _Ejemplo: 42b91c2b-f4eb-47a6-9c45-a1230162da9d_\n    \n\nRespuesta: WalletDTO.\n\nLa respuesta, de ser exitosa, retorna un JSON con los siguientes parámetros:\n\n- **id:** identificador de la billetera.\n- **dni:** DNI del usuario asociado a la billetera.\n- **balance:** Saldo de la billetera.\n    \n\n(**200 - OK**) o una excepcion personalizada (**404 - Not Found**) cuando la billetera a buscar no existe. (WalletDoesNotExist)"
 					},
 					"response": []
 				},
 				{
-					"name": "Read Wallet´s User",
+					"name": "Get User Wallets",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -214,7 +214,7 @@
 								"44913425"
 							]
 						},
-						"description": "Método HTTP: **GET**\n\nParámetros:\n\n- **dni:** (requerido) DNI del usuario asociado a sus billeteras. String. _Ejemplo: 44913425_\n    \n\nRespuesta:\n\nLa respuesta, de ser exitosa, retorna un array JSON con los objetos billeteras del usuario (**200 - OK**). De la billetera solo se retornan los siguientes parámetros:\n\n- **id:** identificador de la billetera.\n- **dni:** DNI del usuario asociado a la billetera.\n- **balance:** Saldo de la billetera.\n    \n\no una excepcion personalizada (UserDoesNotExist) (**404 - Not Found**) cuando el usuario asociado a las billeteras no existe."
+						"description": "Método HTTP: **GET**\n\nParámetros:\n\n- **dni:** (requerido) DNI del usuario asociado a sus billeteras. String. _Ejemplo: 44913425_\n    \n\nRespuesta:\n\nLa respuesta, de ser exitosa, retorna un array JSON con los objetos walletDTO del usuario (**200 - OK**). De la billetera solo se retornan los siguientes parámetros:\n\n- **id:** identificador de la billetera.\n- **dni:** DNI del usuario asociado a la billetera.\n- **balance:** Saldo de la billetera.\n    \n\no una excepcion personalizada (UserDoesNotExist) (**404 - Not Found**) cuando el usuario asociado a las billeteras no existe."
 					},
 					"response": []
 				},
@@ -245,7 +245,7 @@
 								"42b91c2b-f4eb-47a6-9c45-a1230162da9d"
 							]
 						},
-						"description": "Método HTTP: **PUT**\n\nParámetros:\n\n- **id:** (requerido) identificador de la billetera (vía URL). _Ejemplo: 42b91c2b-f4eb-47a6-9c45-a1230162da9d_\n    \n\nDTO Wallet: Datos a actualizar de la billetera. (vía Body).\n\n- **dni:** (requerido) DNI del usuario asociado a la billetera, String. _Ejemplo: 44913425_.\n- **balance** (requerido) Saldo de la billetera, BigDecimal. _Ejemplo: 6500.00_\n    \n\nRespuesta:\n\nLa respuesta, de ser exitosa, consta de un JSON con los parámetros:\n\n- **id:** identificador de la billetera.\n- **dni:** DNI del usuario asociado a la billetera.\n- **balance:** Saldo de la billetera.\n    \n\n(**200 - OK** ) o una excepcion personalizada (WalletDoesNotExist) cuando la billetera a actualizar no existe (**404 - NOT FOUND**)."
+						"description": "Método HTTP: **PUT**\n\nParámetros:\n\n- **id:** (requerido) identificador de la billetera (vía URL). _Ejemplo: 42b91c2b-f4eb-47a6-9c45-a1230162da9d_\n    \n\nWalletDTO: Datos a actualizar de la billetera. (vía Body).\n\n- **dni:** (requerido) DNI del usuario asociado a la billetera, String. _Ejemplo: 44913425_.\n- **balance** (requerido) Saldo de la billetera, BigDecimal. _Ejemplo: 6500.00_\n    \n\nRespuesta: WalletDTO.\n\nLa respuesta, de ser exitosa, consta de un JSON con los parámetros:\n\n- **id:** identificador de la billetera.\n- **dni:** DNI del usuario asociado a la billetera.\n- **balance:** Saldo de la billetera.\n    \n\n(**200 - OK** ) o una excepcion personalizada (WalletDoesNotExist) cuando la billetera a actualizar no existe (**404 - NOT FOUND**)."
 					},
 					"response": []
 				},
@@ -267,7 +267,7 @@
 								"42b91c2b-f4eb-47a6-9c45-a1230162da9d"
 							]
 						},
-						"description": "Método HTTP: **DELETE**\n\nParámetros:\n\n- **id:** (requerido) identificador de la billetera (vía URL). _Ejemplo: 42b91c2b-f4eb-47a6-9c45-a1230162da9d_\n    \n\nRespuesta:\n\nLa respuesta, de ser exitosa, consta de un JSON con los parámetros:\n\n- **id:** identificador de la billetera.\n- **dni:** DNI del usuario asociado a la billetera.\n- **balance:** Saldo de la billetera.\n    \n\n**(200 - OK** ) o una excepcion personalizada (WalletDoesNotExist) cuando la billetera a eliminar no existe (**404 - NOT FOUND**)."
+						"description": "Método HTTP: **DELETE**\n\nParámetros:\n\n- **id:** (requerido) identificador de la billetera (vía URL). _Ejemplo: 42b91c2b-f4eb-47a6-9c45-a1230162da9d_\n    \n\nRespuesta: WalletDTO.\n\nLa respuesta, de ser exitosa, consta de un JSON con los parámetros:\n\n- **id:** identificador de la billetera.\n- **dni:** DNI del usuario asociado a la billetera.\n- **balance:** Saldo de la billetera.\n    \n\n**(200 - OK** ) o una excepcion personalizada (WalletDoesNotExist) cuando la billetera a eliminar no existe (**404 - NOT FOUND**)."
 					},
 					"response": []
 				},
@@ -319,7 +319,7 @@
 					"response": []
 				}
 			],
-			"description": "Operaciones Create, Read, Update, Delete de una billetera."
+			"description": "Operaciones Create, Read, Update, Delete, GetBalance, GetAllBalance de una billetera"
 		},
 		{
 			"name": "Currency",
@@ -350,29 +350,7 @@
 								"currencies"
 							]
 						},
-						"description": "Método HTTP: **POST**\n\nParámetros: (vía Body)\n\n- **ticker:** Identificador de la criptodivisa. String. _Ejemplo: BTC._\n- **name:** Nombre de la criptodivisa. String. _Ejemplo: Bitcoin._\n- **value:** Valor en ARS de la criptodivisa. BigDecimal. _Ejemplo: 100.00_\n    \n\n> La divisa ARS está presente en la base de datos con valor igual a 1 \n  \n\nRespuesta:\n\nLa respuesta, de ser exitosa, consta de un JSON con los parámetros:\n\n- **ticker**\n- **name**\n- **value**\n    \n\n(**201 - CREATED**) o una excepcion personalizada (CurrencyAlreadyExist) cuando la criptodivisa ya existe en la base de datos. **(409 - CONFLICT).**"
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Currency",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "localhost:8080/api/v1/currencies/BTC",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"currencies",
-								"BTC"
-							]
-						},
-						"description": "Método HTTP: **DELETE**\n\nParámetros:\n\n- **ticker:** Identificador de la criptodivisa. String. _Ejemplo: BTC._\n    \n\nRespuesta:\n\nLa respuesta, de ser exitosa, consta de un JSON con los parámetros:\n\n- **ticker:** Identificador de la criptodivisa. String. _Ejemplo: BTC._\n    \n- **name:** Nombre de la criptodivisa. String. _Ejemplo: Bitcoin._\n    \n- **value:** Valor en ARS de la criptodivisa. BigDecimal. _Ejemplo: 100.00_\n    \n\n**(200 - OK** ) o una excepcion personalizada (CurrencyDoesNotExist) cuando la criptodivisa a eliminar no existe (**404 - NOT FOUND**)."
+						"description": "Método HTTP: **POST**\n\nParámetros: CurrencyDTO (vía Body)\n\n- **ticker:** Identificador de la criptodivisa. String. _Ejemplo: BTC._\n- **name:** Nombre de la criptodivisa. String. _Ejemplo: Bitcoin._\n- **value:** Valor en ARS de la criptodivisa. BigDecimal. _Ejemplo: 100.00_\n    \n\n> La divisa ARS está presente en la base de datos con valor igual a 1 \n  \n\nRespuesta: CurrencyDTO.\n\nLa respuesta, de ser exitosa, consta de un JSON con los parámetros:\n\n- **ticker**\n- **name**\n- **value**\n    \n\n(**201 - CREATED**) o una excepcion personalizada (CurrencyAlreadyExist) cuando la criptodivisa ya existe en la base de datos. **(409 - CONFLICT).**"
 					},
 					"response": []
 				},
@@ -403,12 +381,34 @@
 								"BTC"
 							]
 						},
-						"description": "Método HTTP: **PUT**\n\nParámetros:\n\n- **ticker:** Identificador de la criptodivisa. String. _Ejemplo: BTC._\n    \n\nDTO Currency: Datos a actualizar de la criptodivisa. (vía Body).\n\n- **ticker:** Identificador de la criptodivisa. String. _Ejemplo: BTC2._\n- **name:** Nombre de la criptodivisa. String. _Ejemplo: Bitcoin2._\n- **value:** Valor en ARS de la criptodivisa. BigDecimal. _Ejemplo: 200.00_\n    \n\nRespuesta:\n\nLa respuesta, de ser exitosa, consta de un JSON con los parámetros:\n\n- **ticker**\n- **name**\n- **value**\n    \n\n**(200 - OK** ) o una excepcion personalizada (CurrencyDoesNotExist) cuando la criptodivisa a eliminar no existe (**404 - NOT FOUND**)."
+						"description": "Método HTTP: **PUT**\n\nParámetros:\n\n- **ticker:** Identificador de la criptodivisa. String. _Ejemplo: BTC._\n    \n\nCurrencyDTO: Datos a actualizar de la criptodivisa. (vía Body).\n\n- **ticker:** Identificador de la criptodivisa. String. _Ejemplo: BTC2._\n- **name:** Nombre de la criptodivisa. String. _Ejemplo: Bitcoin2._\n- **value:** Valor en ARS de la criptodivisa. BigDecimal. _Ejemplo: 200.00_\n    \n\nRespuesta: CurrencyDTO\n\nLa respuesta, de ser exitosa, consta de un JSON con los parámetros:\n\n- **ticker**\n- **name**\n- **value**\n    \n\n**(200 - OK** ) o una excepcion personalizada (CurrencyDoesNotExist) cuando la criptodivisa a actualizar no existe (**404 - NOT FOUND**)."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Currency",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/currencies/BTC",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"currencies",
+								"BTC"
+							]
+						},
+						"description": "Método HTTP: **DELETE**\n\nParámetros:\n\n- **ticker:** Identificador de la criptodivisa. String. _Ejemplo: BTC._\n    \n\nRespuesta:\n\nLa respuesta, de ser exitosa, consta de un JSON con los parámetros:\n\n- **ticker:** Identificador de la criptodivisa. String. _Ejemplo: BTC._\n    \n- **name:** Nombre de la criptodivisa. String. _Ejemplo: Bitcoin._\n    \n- **value:** Valor en ARS de la criptodivisa. BigDecimal. _Ejemplo: 100.00_\n    \n\n**(200 - OK** ) o una excepcion personalizada (CurrencyDoesNotExist) cuando la criptodivisa a eliminar no existe (**404 - NOT FOUND**)."
 					},
 					"response": []
 				}
 			],
-			"description": "Operaciones Create, Read, Update, Delete de una criptodivisa."
+			"description": "Operaciones Create, Update y Delete de una criptodivisa."
 		},
 		{
 			"name": "Transaction",
@@ -439,12 +439,12 @@
 								"transactions"
 							]
 						},
-						"description": "Método HTTP: **POST**\n\nParámetros: (vía Body)\n\n1. Intercambio:\n    \n\n- **type:** (requerido) Tipo de la transacción, en este caso, Intercambio. String.\n- **origin_currency_ticker:** (requerido) Criptodivisa de origen a intercambiar. String. _Ejemplo: BTC._\n- **destination_currency_ticker:** (requerido) Criptodivisa de destino a intercambiar. String. _Ejemplo: ETH._\n- **origen_wallet_id:** (requerido) billetera que será origen en el intercambio. UUID.\n- **destination_wallet_id:** (requerido) billetera que será destino en el intercambio. UUID.\n- **origin_amount:** (requerido) Cantidad de criptodivisa origen que se desea intercambiar. BigDecimal. _Ejemplo: 1_\n    \n\n> destination_amount: Se calcula en el momento en que se realiza la operación de intercambio, y depende de cuántas criptomonedas de origen (origin_amount) se quiere intercambiar. \n  \n\n2\\. Depósito.\n\n- **type:** (requerido) Tipo de la transacción, en este caso, Deposito. String.\n- **destination_currency_ticker:** (requerido)Criptodivisa a depositar. String. _Ejemplo: ETH._\n- **destination_wallet_id:** (requerido) billetera destino a depositar. UUID.\n- **destination_amount:** (requerido) Cantidad de criptodivisa a depositar.\n    \n\nRespuesta:\n\nLa respuesta, de ser exitosa, consta de un JSON con los parámetros:\n\n- **idtransaction:** Identificador de la transacción. Long.\n- **date_transaction:** Fecha, dia y hora en la que se efectuó la transacción. Timestamp.\n- **type:** Tipo de la transacción. String.\n- **origen_wallet_id:** Billetera de origen. UUID.\n- **destination_wallet_id:** Billetera de destino. UUID.\n    \n\n**(200 - OK)** o varias excepciones personalizadas posibles:\n\n- CurrencyDoesNotExist: Una criptodivisa a intercambiar/depositar no existe.\n    \n- WalletDoesNotExist: Una billetera no existe.\n    \n- HoldingDoesNotExist: Una billetera no posee tenencias de cripto.\n- NotEnoughFunds: Una billetera no posee los sufiencientes fondos para realizar un intercambio.\n    \n\n> La transacción depósito tiene una comision del 0.25% de la cantidad a depositar."
+						"description": "Método HTTP: **POST**\n\nParámetros: (vía Body)\n\n1. Intercambio:\n    \n\n- **type:** (requerido) Tipo de la transacción, en este caso, Intercambio. String.\n- **origin_currency_ticker:** (requerido) Criptodivisa de origen a intercambiar. String. _Ejemplo: BTC._\n- **destination_currency_ticker:** (requerido) Criptodivisa de destino a intercambiar. String. _Ejemplo: ETH._\n- **origen_wallet_id:** (requerido) billetera que será origen en el intercambio. UUID.\n- **destination_wallet_id:** (requerido) billetera que será destino en el intercambio. UUID.\n- **origin_amount:** (requerido) Cantidad de criptodivisa origen que se desea intercambiar. BigDecimal. _Ejemplo: 1_\n    \n\n> destination_amount: Se calcula en el momento en que se realiza la operación de intercambio, y depende de cuántas criptomonedas de origen (origin_amount) se quiere intercambiar. \n  \n\n2\\. Depósito.\n\n- **type:** (requerido) Tipo de la transacción, en este caso, Deposito. String.\n- **destination_currency_ticker:** (requerido)Criptodivisa a depositar. String. _Ejemplo: ETH._\n- **destination_wallet_id:** (requerido) billetera destino a depositar. UUID.\n- **destination_amount:** (requerido) Cantidad de criptodivisa a depositar.\n    \n\nRespuesta:\n\nLa respuesta, de ser exitosa, consta de un JSON con los parámetros:\n\n- **idtransaction:** Identificador de la transacción. Long.\n- **date_transaction:** Fecha, dia y hora en la que se efectuó la transacción. Timestamp.\n- **type:** Tipo de la transacción. String.\n- **origen_wallet_id:** Billetera de origen. UUID.\n- **destination_wallet_id:** Billetera de destino. UUID.\n    \n\n**(200 - OK)** o varias excepciones personalizadas posibles:\n\n- CurrencyDoesNotExist: Una criptodivisa a intercambiar/depositar no existe.\n- WalletDoesNotExist: Una billetera no existe.\n- HoldingDoesNotExist: Una billetera no posee tenencias de cripto.\n- NotEnoughFunds: Una billetera no posee los sufiencientes fondos para realizar un intercambio.\n    \n\n> La transacción depósito tiene una comision del 0.25% de la cantidad a depositar."
 					},
 					"response": []
 				}
 			],
-			"description": "Operaciones: Depósito de criptodivisa, intercambio de criptodivisas y consulta de saldo."
+			"description": "Operaciones: Depósito de criptodivisa e intercambio de criptodivisas."
 		}
 	]
 }
