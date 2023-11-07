@@ -27,8 +27,8 @@ Se aplicaron patrones de diseño como DAO, DTO, Inyección de dependencias.
 		- [Delete Currency](#delete-currency)
   	- [Transaction](#transaction)
 		- [Create Transaction](#create-transaction)
-			- [Intercambio](#1.-intercambio)
-			- [Deposito](#2.-deposito)
+			- [Intercambio](#intercambio)
+			- [Deposito](#deposito)
        
 
 ## Instalación
