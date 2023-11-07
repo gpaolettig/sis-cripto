@@ -59,7 +59,7 @@ scripts/creacion_bd.sql
 ### Realizá una carga de datos de prueba
 Abrí tu cliente de MySQL y abrí el archivo que se encuentra en scripts/datos_prueba_bd.sql seleccioná la base de datos y ejecutá el archivo.
 > [!IMPORTANT]
-> La carga de datos de prueba contiene algunas criptodivisas y la wallet de la empresa, por lo tanto si no se cargan estos datos, deberás cargar a mano las criptodivisas y no podrás realizar depósitos por no existir la wallet de la empresa que cobra comisión.
+> La carga de datos de prueba contiene algunas criptodivisas y la wallet de la empresa, por lo tanto, si no se cargan estos datos deberás cargar a mano las criptodivisas y no podrás realizar depósitos por no existir la wallet de la empresa que cobra comisión.
 
 ### Ejecutá la Aplicación
 Una vez que hayas configurado la base de datos y guardado los cambios en application.properties, podes ejecutar la aplicación. Busca la clase principal "SisCriptoApplication" (etiquetada como @SpringBootApplication) y dale al botón run (ejecutar) de tu entorno de desarrollo.
