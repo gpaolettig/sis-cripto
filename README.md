@@ -6,6 +6,7 @@ Se aplicaron patrones de diseño como DAO, DTO, Inyección de dependencias.
 ---
 ## Índice
 - [Instalacion](#Instalación)
+- [Modelo Entidad Relación](#modelo-ER)
 - [Endpoints API](#endpoints-api)
 	- [User](#user)
 		- [Create User](#create-user)
@@ -68,6 +69,13 @@ Una vez que hayas configurado la base de datos y guardado los cambios en applica
 A través de Postman podes probar los diferentes endpoints de la API. 
 Abrí Postman y cargá en tu workspace la colleción que se encuentra en scripts/API REST- Cripto.postman_collection.json
 Por último proba los diferentes endpoints siguiendo las instrucciones en la misma docu.
+
+## Modelo ER
+A continuación se adjunta el modelo entidad relación correspondiente a la base de datos.
+
+![ER_model_en](https://github.com/gipage/sis-cripto/assets/83784311/d56c9165-351c-427d-b3ed-4deae34f7682)
+
+
 
 ## Endpoints API
 ### User
