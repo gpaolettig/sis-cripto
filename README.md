@@ -56,7 +56,7 @@ spring.datasource.url=jdbc:mysql://localhost/nombre-de-tu-bd?useUnicode=true&cha
 
 ### Creá la Base de Datos
 Abrí tu cliente de MySQL y crea la base de datos con el nombre que especificaste en la URL anterior. Utilizá el script de creación de base de datos que se proporciona en 
-scripts/creacion_bd.sql
+src/main/resources/scripts/creacion_bd.sql
 ### Realizá una carga de datos de prueba
 Abrí tu cliente de MySQL y abrí el archivo que se encuentra en scripts/datos_prueba_bd.sql seleccioná la base de datos y ejecutá el archivo.
 > [!IMPORTANT]
@@ -67,8 +67,8 @@ Una vez que hayas configurado la base de datos y guardado los cambios en applica
 
 ### Accede a la Aplicación
 A través de Postman podes probar los diferentes endpoints de la API. 
-Abrí Postman y cargá en tu workspace la colleción que se encuentra en scripts/API REST- Cripto.postman_collection.json
-Por último proba los diferentes endpoints siguiendo las instrucciones en la misma docu.
+Abrí Postman y cargá en tu workspace la colleción que se encuentra en src/main/resources/scripts/API REST- Cripto.postman_collection.json
+Por último probá los diferentes endpoints siguiendo las instrucciones en la misma docu.
 
 ## Modelo ER
 A continuación se adjunta el modelo entidad relación correspondiente a la base de datos.
