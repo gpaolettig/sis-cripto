@@ -6,10 +6,13 @@ import com.gino.siscripto.model.entity.Holding;
 import com.gino.siscripto.model.entity.User;
 import com.gino.siscripto.service.interfaces.IHoldingService;
 import com.gino.siscripto.service.interfaces.IUserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/api/v1")
@@ -23,7 +26,7 @@ public class UserController {
 
 
     @PostMapping("/usuarios")
-    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) throws ApiException {
+    public ResponseEntity<?> createUser(@Valid @RequestBody  UserDTO userDTO) throws ApiException {
         return new ResponseEntity<>(userService.createUser(userDTO), HttpStatus.CREATED);
     }
 
@@ -40,7 +43,7 @@ public class UserController {
     }
 
     @PutMapping("/usuarios/{dni}") //me pasan los datos que quiero modificar en el dto
-    public ResponseEntity<?> update(@RequestBody UserDTO userDTO, @PathVariable String dni) throws ApiException {
+    public ResponseEntity<?> update(@RequestBody @Valid UserDTO userDTO, @PathVariable String dni) throws ApiException {
         return new ResponseEntity<>(userService.updateUser(dni, userDTO), HttpStatus.OK);
 
     }
